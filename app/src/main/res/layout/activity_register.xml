@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/form"
+        android:textSize="25sp"
+        android:textColor="@color/coral"
+        android:fontFamily="cursive"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:text="@string/name" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="27"
+            android:inputType="text"
+            android:id="@+id/etName"
+            android:textSize="20sp"
+            android:fontFamily="cursive"
+            android:textColor="@color/coral"
+            android:textStyle="bold"
+            android:hint="@string/name2"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:text="@string/last" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="27"
+            android:inputType="text"
+            android:id="@+id/etLastname"
+            android:textSize="20sp"
+            android:fontFamily="cursive"
+            android:textColor="@color/coral"
+            android:textStyle="bold"
+            android:hint="@string/lastname"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:text="@string/login" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:maxLength="27"
+            android:inputType="text"
+            android:id="@+id/etLogin"
+            android:textSize="20sp"
+            android:fontFamily="cursive"
+            android:textColor="@color/coral"
+            android:textStyle="bold"
+            android:hint="@string/user"
+            android:gravity="center"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:text="@string/password" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pass"
+            android:inputType="textPassword"
+            android:textColor="@color/coral"
+            android:textSize="20sp"
+            android:fontFamily="cursive"
+            android:gravity="center_horizontal"
+            android:id="@+id/etPass"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:hint="@string/pass2"
+            android:text="@string/password2" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pass2"
+            android:inputType="textPassword"
+            android:textColor="@color/coral"
+            android:textSize="20sp"
+            android:fontFamily="cursive"
+            android:gravity="center_horizontal"
+            android:id="@+id/etPass2"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:fontFamily="@font/roboto_regular"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:hint="@string/email"
+            android:text="@string/email" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email2"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/coral"
+            android:textSize="20sp"
+            android:fontFamily="cursive"
+            android:gravity="center_horizontal"
+            android:id="@+id/etEmail"/>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup"
+        android:onClick="signup"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textColor="@color/orangered"
+        android:fontFamily="@font/roboto_black"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        />
+
+</LinearLayout>

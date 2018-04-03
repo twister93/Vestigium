@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/trippy"
+        android:id="@+id/ivLogin"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/black"
+        android:layout_gravity="center"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/user"
+        android:fontFamily="cursive"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:inputType="text"
+        android:id="@+id/etUser"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/pass"
+        android:fontFamily="cursive"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:inputType="textPassword"
+        android:id="@+id/etPass"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/acept"
+        android:id="@+id/btAcept"
+        android:textAllCaps="false"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/orangered"
+        android:onClick="acept"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:id="@+id/tvRegister"
+        android:gravity="center"
+        android:textColor="@color/blue"
+        android:fontFamily="@font/roboto_medium"
+        android:onClick="register"/>
+
+</LinearLayout>

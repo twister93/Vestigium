@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Vestigium</string>
+    <string name="user">User</string>
+    <string name="pass">Password</string>
+    <string name="acept">Acept</string>
+    <string name="register">Register</string>
+    <string name="form">Sign Up</string>
+    <string name="login">User Login: </string>
+    <string name="password">Password: </string>
+    <string name="password2">Password(Repeat):</string>
+    <string name="pass2">Password Again</string>
+    <string name="email">Email:</string>
+    <string name="signup">Sign Up</string>
+    <string name="email2">your email</string>
+    <string name="name">Name:</string>
+    <string name="name2">your name</string>
+    <string name="lastname">your last name</string>
+    <string name="last">Last name:</string>
+    <string name="profile">My Profile</string>
+    <string name="exit">Exit</string>
+    <string name="home">Home</string>
+    <string name="title">Journey Daily (Descripción)</string>
+    <string name="description">Muchas veces se quiere recordar e incluso compartir cronológicamente un viaje realizado, ya sea en moto, carro, alguna actividad física o caminata por un bosque, y almacenar una foto con la ubicación exacta de dónde se tomó e información general como temperatura, velocidad, altitud, recorrido, incluso la frecuencia cardiaca, toda esta información en una línea de tiempo situada en el mapa del recorrido. Sucede en muchas ocasiones que las personas quieren guardar sus fotos por viajes que hicieron, lo que se hace usualmente es crear carpetas y organizar por fechas o publicarlas en alguna red social creando álbumes, pero eso siempre requiere algún tiempo. ¿Qué tal si se pudiera tener una aplicación que lo hiciera? crear álbumes por viajes, llevar un seguimiento del viaje realizado cada vez que se active la aplicación y al momento de finalizar el viaje se pueda ver de manera cronológica todo lo que sucedió, los lugares que se visitaron y mantenerlos de forma privada o no.</string>
+    <string name="userp">your user</string>
+</resources>
