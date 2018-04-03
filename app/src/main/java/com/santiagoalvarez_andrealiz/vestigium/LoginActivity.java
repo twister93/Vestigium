@@ -22,8 +22,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText etUser, etPass;
     String user, pass,name,lastname,email;
     Button btAcept;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,26 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         etPass = findViewById(R.id.etPass);
         btAcept = findViewById(R.id.btAcept);
 
-        inicializar();
-
-    }
-
-    private void inicializar(){
-        //Conecting with firebase service
-        firebaseAuth = FirebaseAuth.getInstance();
-        //Listener
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                //bring the information user (the current user)
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser != null){ //someone logged
-                    Log.d("FirebaseUser", "Usuario Logeado: "+firebaseUser.getEmail());
-                }else{
-                    Log.d("FirebaseUser","No hay usuario logeado");
-                }
-            }
-        };
     }
 
     public void register(View view) {
@@ -99,18 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     public void acept(View view) {
         int id = view.getId();
 
-        firebaseAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else{
-                    Toast.makeText(LoginActivity.this, "Error al iniciar", Toast.LENGTH_SHORT).show();
-                }
-            }});
-        /*if(id == R.id.btAcept){
+        if(id == R.id.btAcept){
             if ( user.equals(etUser.getText().toString())  &&  pass.equals(etPass.getText().toString())){
                 //Actividad principal -> enviar datos a MainActivity para luego enviar a perfil
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -125,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 //Toast
                 Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
             }
-        }*/
+        }
     }
 
 

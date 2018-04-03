@@ -24,8 +24,6 @@ public class RegisterActivity extends AppCompatActivity {
     Button btSignup;
     EditText etName, etLastname, etLogin, etPass, etPass2, etEmail;
     String name, lastname,user, pass, pass2, email;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -42,25 +40,6 @@ public class RegisterActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         btSignup = findViewById(R.id.btSignup);
 
-        //start firebase components
-        inicializar();
-    }
-    private void inicializar(){
-        //Conecting with firebase service
-        firebaseAuth = FirebaseAuth.getInstance();
-        //Listener
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                //bring the information user (the current user)
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser != null){ //someone logged
-                    Log.d("FirebaseUser", "Usuario Logeado: "+firebaseUser.getEmail());
-                }else{
-                    Log.d("FirebaseUser","No hay usuario logeado");
-                }
-            }
-        };
     }
 
     public void signup(View view) {
@@ -73,8 +52,6 @@ public class RegisterActivity extends AppCompatActivity {
         pass = etPass.getText().toString();
         pass2 = etPass2.getText().toString();
         email = etEmail.getText().toString();
-
-        signup_db(email,pass);
 
         if (id==R.id.btSignup && TextUtils.isEmpty(name) ||TextUtils.isEmpty(lastname) || TextUtils.isEmpty(pass)
                 ||TextUtils.isEmpty(pass2)||TextUtils.isEmpty(email)){
@@ -92,20 +69,5 @@ public class RegisterActivity extends AppCompatActivity {
             setResult(RESULT_OK,intent);
             finish();
         }
-    }
-
-    private void signup_db(String mail, String passwd){
-        firebaseAuth.createUserWithEmailAndPassword(mail, passwd).addOnCompleteListener(this,
-                new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "Cuenta Creada", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(RegisterActivity.this, "NO", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }
-                });
     }
 }
