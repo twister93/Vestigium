@@ -22,4 +22,7 @@
     <string name="title">Journey Daily (Descripción)</string>
     <string name="description">Muchas veces se quiere recordar e incluso compartir cronológicamente un viaje realizado, ya sea en moto, carro, alguna actividad física o caminata por un bosque, y almacenar una foto con la ubicación exacta de dónde se tomó e información general como temperatura, velocidad, altitud, recorrido, incluso la frecuencia cardiaca, toda esta información en una línea de tiempo situada en el mapa del recorrido. Sucede en muchas ocasiones que las personas quieren guardar sus fotos por viajes que hicieron, lo que se hace usualmente es crear carpetas y organizar por fechas o publicarlas en alguna red social creando álbumes, pero eso siempre requiere algún tiempo. ¿Qué tal si se pudiera tener una aplicación que lo hiciera? crear álbumes por viajes, llevar un seguimiento del viaje realizado cada vez que se active la aplicación y al momento de finalizar el viaje se pueda ver de manera cronológica todo lo que sucedió, los lugares que se visitaron y mantenerlos de forma privada o no.</string>
     <string name="userp">your user</string>
+    <string name="log">Log In</string>
+    <string name="email3">Email</string>
+    <string name="logout">Log Out</string>
 </resources>

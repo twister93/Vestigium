@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "147471424066",
+    "firebase_url": "https://vestigium-22cae.firebaseio.com",
+    "project_id": "vestigium-22cae",
+    "storage_bucket": "vestigium-22cae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147471424066:android:cc57c5573c68e514",
+        "android_client_info": {
+          "package_name": "com.santiagoalvarez_andrealiz.vestigium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147471424066-2erdsro3nqjlf1k0130k8jsd0ei45el3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santiagoalvarez_andrealiz.vestigium",
+            "certificate_hash": "0c7ac6ed38d9a51512da7e1bf0e304b75217e13d"
+          }
+        },
+        {
+          "client_id": "147471424066-apq1c9ap7sv1ocnsidvsjtrn9pcp1sfp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYIPpU13w1QwvkCmxqxcVlP-DrMCJRR84"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147471424066-apq1c9ap7sv1ocnsidvsjtrn9pcp1sfp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

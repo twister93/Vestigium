@@ -1,58 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <ImageView
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:id="@+id/ivLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/trippy"
-        android:id="@+id/ivLogin"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/black"
-        android:layout_gravity="center"/>
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/vestigium" />
+
     <EditText
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/user"
         android:fontFamily="cursive"
         android:gravity="center"
-        android:textStyle="bold"
+        android:hint="@string/email3"
+        android:inputType="textEmailAddress"
         android:textSize="30sp"
-        android:inputType="text"
-        android:id="@+id/etUser"/>
+        android:textStyle="bold" />
+
     <EditText
+        android:id="@+id/etPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="cursive"
+        android:gravity="center"
         android:hint="@string/pass"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textSize="30sp"
         android:inputType="textPassword"
-        android:id="@+id/etPass"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:textSize="30sp"
-        android:text="@string/acept"
-        android:id="@+id/btAcept"
-        android:textAllCaps="false"
-        android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/orangered"
-        android:onClick="acept"/>
-    <TextView
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:id="@+id/tvRegister"
-        android:gravity="center"
-        android:textColor="@color/blue"
         android:fontFamily="@font/roboto_medium"
-        android:onClick="register"/>
+        android:onClick="loginclicked"
+        android:text="@string/log"
+        android:textAllCaps="false"
+        android:textColor="@color/orangered"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center"
+        android:onClick="register"
+        android:text="@string/register"
+        android:textColor="@color/blue" />
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/btnSignInGoogle">
+    </com.google.android.gms.common.SignInButton>
 
 </LinearLayout>
