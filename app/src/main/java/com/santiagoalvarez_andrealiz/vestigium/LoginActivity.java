@@ -50,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        btnSignInGoogle = findViewById(R.id.btnSignInGoogle);
+
         btnSignInGoogle.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
