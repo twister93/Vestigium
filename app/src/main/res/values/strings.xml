@@ -25,4 +25,6 @@
     <string name="log">Log In</string>
     <string name="email3">Email</string>
     <string name="logout">Log Out</string>
+    <string name="facebook_app_id">210525876381376</string>
+    <string name="fb_login_protocol_scheme">fb210525876381376</string>
 </resources>

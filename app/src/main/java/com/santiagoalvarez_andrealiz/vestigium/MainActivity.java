@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -118,16 +119,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public void logoutclicked(View view) { logout(); }
     public void logout(){
         firebaseAuth.signOut();
-        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-                if (status.isSuccess()){
-                    goLoginActivity();
-                }else {
-                    Toast.makeText(MainActivity.this,"Error cerrando sesión con Google",Toast.LENGTH_SHORT).show();
+        if (Auth.GoogleSignInApi != null){
+            Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
+                    if (status.isSuccess()){
+                        goLoginActivity();
+                    }else {
+                        Toast.makeText(MainActivity.this,"Error cerrando sesión con Google",Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
+        if (LoginManager.getInstance() != null){
+            LoginManager.getInstance().logOut();
+        }
     }
     private void goLoginActivity(){
         Intent i = new Intent(MainActivity.this,LoginActivity.class);
