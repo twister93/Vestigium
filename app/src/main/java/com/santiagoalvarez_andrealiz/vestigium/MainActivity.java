@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser(); // carga los datos del usuario una vez logueado
                 if (firebaseUser != null) {//alguien está logueado
-                    tvUseremail.setText(firebaseUser.getEmail());
+                    tvUseremail.setText("Correo Usuario: "+firebaseUser.getEmail());
                     Picasso.get().load(firebaseUser.getPhotoUrl()).into(ivFoto);
                 } else {
                     Log.d("FirebaseUser", "El usuario ha cerrado sesión");
