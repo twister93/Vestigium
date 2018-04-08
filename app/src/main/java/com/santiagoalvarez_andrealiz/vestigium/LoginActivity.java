@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private SignInButton btnSignInGoogle;
 
-
+//
     TextView tvRegister;
     EditText etUser, etEmail, etPass;
     String user, pass, name, lastname, email;
