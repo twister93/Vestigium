@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    String user="*",pass,name,lastname,email;
+    String user = "*", pass, name, lastname, email;
     TextView etNameP, etLastnameP, etUserP, etEmailP;
 
     @Override
@@ -49,10 +49,10 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.mHome){
+        if (id == R.id.mHome) {
             onBackPressed();
         }
-        if(id == R.id.mExit){
+        if (id == R.id.mExit) {
             user = getIntent().getExtras().getString("user");
             name = getIntent().getExtras().getString("name");
             pass = getIntent().getExtras().getString("pass");
@@ -60,10 +60,10 @@ public class ProfileActivity extends AppCompatActivity {
             email = getIntent().getExtras().getString("email");
             Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
             intent.putExtra("user", user);
-            intent.putExtra("name",name);
-            intent.putExtra("pass",pass);
-            intent.putExtra("lastname",lastname);
-            intent.putExtra("email",email);
+            intent.putExtra("name", name);
+            intent.putExtra("pass", pass);
+            intent.putExtra("lastname", lastname);
+            intent.putExtra("email", email);
             startActivity(intent);
             finish();
         }
@@ -79,10 +79,10 @@ public class ProfileActivity extends AppCompatActivity {
         email = getIntent().getExtras().getString("email");
         Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         intent.putExtra("user", user);
-        intent.putExtra("name",name);
-        intent.putExtra("pass",pass);
-        intent.putExtra("lastname",lastname);
-        intent.putExtra("email",email);
+        intent.putExtra("name", name);
+        intent.putExtra("pass", pass);
+        intent.putExtra("lastname", lastname);
+        intent.putExtra("email", email);
         startActivity(intent);
         finish();
         super.onBackPressed();

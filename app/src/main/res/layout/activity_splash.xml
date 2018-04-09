@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:id="@+id/ivSplash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/imagesplash"
-        android:id="@+id/ivSplash"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/black"/>
+        android:layout_centerVertical="true"
+        android:background="@color/black"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/imagesplash" />
 
 </RelativeLayout>
