@@ -71,12 +71,14 @@ public class PruebaDBActivity extends AppCompatActivity {
 
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
                 String uid = usuarioslist.get(position).getId();
+                usuarioslist.remove(position);
+                nombreslist.remove(position);
+                databaseReference.child("Usuarios").child(uid).removeValue();
                 return false;
             }
         });
