@@ -204,7 +204,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void goMainActivity(){
-        Intent i = new Intent(LoginActivity.this,MainActivity.class);
+        Intent i = new Intent(LoginActivity.this,/*MainActivity*/PruebaDBActivity.class);
         startActivity(i);
         finish();
     }
@@ -238,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                   Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                   Intent i = new Intent(LoginActivity.this,/*MainActivity*/PruebaDBActivity.class);
                    startActivity(i);
                    finish();
                 }else {
