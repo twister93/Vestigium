@@ -41,6 +41,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser == null){ //No user login
+            Intent i =new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
+
         tvUseremail = findViewById(R.id.tvUseremail);
         ivFoto = findViewById(R.id.ivFoto);
         inicializar();

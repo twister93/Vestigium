@@ -39,6 +39,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.santiagoalvarez_andrealiz.vestigium.model.Usuarios;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -273,6 +279,32 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
+    }
+
+    private void crearUsuario(){
+        FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("usuario").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Log.d("Existe: ", "SI");
+                } else {
+                    Log.d("Existe","NO");
+                    //Usuarios usuarios = new Usuarios(firebaseUser.getUid(),  firebaseUser.getDisplayName(), firebaseUser.getPhoneNumber(), firebaseUser.getEmail());
+                    databaseReference.child("usuarios").child(firebaseUser.getUid());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
