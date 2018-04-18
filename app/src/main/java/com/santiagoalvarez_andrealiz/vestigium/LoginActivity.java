@@ -44,6 +44,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.santiagoalvarez_andrealiz.vestigium.model.Users;
 import com.santiagoalvarez_andrealiz.vestigium.model.Usuarios;
 
 import java.security.MessageDigest;
@@ -65,9 +66,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
+    private DatabaseReference databaseReference;
+
 
     TextView tvRegister;
-    EditText etUser, etEmail, etPass;
+    EditText etUser, etEmail, etPass, etName;
     String user, pass, name, lastname, email;
     Button btLogin;
 
@@ -75,6 +78,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        FirebaseDatabase.getInstance(); //.setPersistenceEnabled(true);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         btnSignInGoogle = findViewById(R.id.btnSignInGoogle);
 
@@ -101,18 +107,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         }
 
-        Bundle extra = getIntent().getExtras();
-        if (extra == null) {
-            user = "1237842543420389702932874603894503487512890309";
-        } else {
-            user = extra.getString("user");
-            pass = extra.getString("pass");
-            email = extra.getString("email");
-            lastname = extra.getString("lastname");
-            name = extra.getString("name");
-        }
 
-
+        etName = findViewById(R.id.etName);
         tvRegister = findViewById(R.id.tvRegister);
         etEmail = findViewById(R.id.etEmail);
         etPass = findViewById(R.id.etPass);
@@ -140,9 +136,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-
         inicializar();
-
     }
 
     private void signInFacebook(AccessToken accessToken){
@@ -165,34 +159,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
-    public void register(View view) {
-        int id = view.getId();
-
-        if (id == R.id.tvRegister) {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivityForResult(intent, 1234);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1){
-            GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            signInGoogle(googleSignInResult);
-        } else {
-            callbackManager.onActivityResult(requestCode,resultCode,data);
-        }
-
-        /*if (requestCode == 1234 && resultCode == RESULT_OK) {
-            user = String.valueOf(data.getExtras().getString("user"));
-            pass = String.valueOf(data.getExtras().getString("pass"));
-            name = String.valueOf(data.getExtras().getString("name"));
-            lastname = String.valueOf(data.getExtras().getString("lastname"));
-            email = String.valueOf(data.getExtras().getString("email"));
-        }*/
-
-    }
     public void signInGoogle (GoogleSignInResult googleSignInResult){
         if (googleSignInResult.isSuccess()){//hasta acá ya es exitoso en google, falta firebase
             AuthCredential authCredential = GoogleAuthProvider.getCredential(
@@ -209,8 +175,42 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    public void register(View view) {
+        int id = view.getId();
+
+        if (id == R.id.tvRegister) {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivityForResult(intent, 1234);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1){
+            GoogleSignInResult googleSignInResult = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            signInGoogle(googleSignInResult);
+        } else if (requestCode == 1234 && resultCode == RESULT_OK) {
+            Users users = new Users (databaseReference.push().getKey(),
+                    etName.getText().toString(),
+                    etEmail.getText().toString());
+            databaseReference.child("usuarios").child(users.getId()).setValue(users);
+        } else {
+            callbackManager.onActivityResult(requestCode,resultCode,data);
+        }
+
+        /*if (requestCode == 1234 && resultCode == RESULT_OK) {
+            user = String.valueOf(data.getExtras().getString("user"));
+            pass = String.valueOf(data.getExtras().getString("pass"));
+            name = String.valueOf(data.getExtras().getString("name"));
+            lastname = String.valueOf(data.getExtras().getString("lastname"));
+            email = String.valueOf(data.getExtras().getString("email"));
+        }*/
+
+    }
+
     private void goMainActivity(){
-        Intent i = new Intent(LoginActivity.this,/*MainActivity*/PruebaDBActivity.class);
+        Intent i = new Intent(LoginActivity.this,MainActivity/*PruebaDBActivity*/.class);
         startActivity(i);
         finish();
     }
@@ -219,24 +219,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         email = etEmail.getText().toString();
         pass = etPass.getText().toString();
         login(email,pass);
-        /*int id = view.getId();
-
-        if (id == R.id.btLogin) {
-            if (user.equals(etUser.getText().toString()) && pass.equals(etPass.getText().toString())) {
-                //Actividad principal -> enviar datos a MainActivity para luego enviar a perfil
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("user", user);
-                intent.putExtra("pass", pass);
-                intent.putExtra("name", name);
-                intent.putExtra("lastname", lastname);
-                intent.putExtra("email", email);
-                startActivity(intent);
-                finish();
-            } else {
-                //Toast
-                Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
-            }
-        }*/
     }
 
     public void login(String email, String pass){
@@ -244,11 +226,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                   Intent i = new Intent(LoginActivity.this,/*MainActivity*/PruebaDBActivity.class);
+                   Intent i = new Intent(LoginActivity.this,MainActivity/*PruebaDBActivity*/.class);
                    startActivity(i);
                    finish();
                 }else {
                     Toast.makeText(LoginActivity.this,"Error en inicio de sesión"+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    /*if (email == "" && pass == ""){
+                        Toast.makeText(LoginActivity.this,"Error en inicio de sesión"+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                    }*/
                 }
             }
         });
@@ -278,7 +263,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
     }
 
     private void crearUsuario(){
