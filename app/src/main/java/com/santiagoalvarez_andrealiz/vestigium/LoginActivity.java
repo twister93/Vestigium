@@ -199,14 +199,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             callbackManager.onActivityResult(requestCode,resultCode,data);
         }
 
-        /*if (requestCode == 1234 && resultCode == RESULT_OK) {
-            user = String.valueOf(data.getExtras().getString("user"));
-            pass = String.valueOf(data.getExtras().getString("pass"));
-            name = String.valueOf(data.getExtras().getString("name"));
-            lastname = String.valueOf(data.getExtras().getString("lastname"));
-            email = String.valueOf(data.getExtras().getString("email"));
-        }*/
-
     }
 
     private void goMainActivity(){
@@ -221,22 +213,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         login(email,pass);
     }
 
-    public void login(String email, String pass){
-        firebaseAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                   Intent i = new Intent(LoginActivity.this,MainActivity/*PruebaDBActivity*/.class);
-                   startActivity(i);
-                   finish();
-                }else {
-                    Toast.makeText(LoginActivity.this,"Error en inicio de sesión"+task.getException().toString(), Toast.LENGTH_SHORT).show();
-                    /*if (email == "" && pass == ""){
-                        Toast.makeText(LoginActivity.this,"Error en inicio de sesión"+task.getException().toString(), Toast.LENGTH_SHORT).show();
-                    }*/
+    public void login(String email, String pass) {
+        if (email.equals("")|| pass.equals("")) {
+            Toast.makeText(LoginActivity.this, "Escriba su usuario y contraseña", Toast.LENGTH_SHORT).show();
+        }else{
+            firebaseAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Error en inicio de sesión" + task.getException().toString(), Toast.LENGTH_SHORT).show();
+                        Log.d("vacio: ", "Usuario no registrado");
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void inicializar() {

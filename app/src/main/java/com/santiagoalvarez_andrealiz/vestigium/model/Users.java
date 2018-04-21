@@ -24,6 +24,13 @@ public class Users {
         this.email = email;
     }
 
+    public Users(String id, String name, String email, String photos) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.photos = photos;
+    }
+
     public String getId() {
         return id;
     }
