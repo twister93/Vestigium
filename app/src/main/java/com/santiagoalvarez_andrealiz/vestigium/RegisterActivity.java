@@ -18,6 +18,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.santiagoalvarez_andrealiz.vestigium.model.Users;
+import com.santiagoalvarez_andrealiz.vestigium.model.Usuarios;
 
 import java.util.Objects;
 
@@ -29,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
+    private DatabaseReference databaseReference;
 
     Button btSignup;
     EditText etName, etLastname, etLogin, etPass, etPass2, etEmail;
@@ -49,6 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
         btSignup = findViewById(R.id.btSignup);
 
         inicializar();
+
+       //FirebaseDatabase.getInstance(); //.setPersistenceEnabled(true);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     private void inicializar(){
@@ -88,15 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "La contraseña debe ser de mínimo 6 carácteres", Toast.LENGTH_SHORT).show();
         }else {
             signup(email,pass);
-
-          /*  Intent intent = new Intent();//No le digo donde estoy ni para donde voy
-            intent.putExtra("user", user);
-            intent.putExtra("pass", pass);
-            intent.putExtra("name", name);
-            intent.putExtra("lastname", lastname);
-            intent.putExtra("email", email);
-            setResult(RESULT_OK, intent);
-            finish();*/
         }
     }
 
@@ -106,6 +105,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) { //Informa si fue exitosa la creación del usuario en Firebase o no
                 if (task.isSuccessful()){
                     Toast.makeText(RegisterActivity.this,"Cuenta creada", Toast.LENGTH_SHORT).show();
+                    goLoginActivity();
+                    saveClicked();
                 }else {
                     Toast.makeText(RegisterActivity.this,"Error al crear cuenta"/*task.getException().toString()*/, Toast.LENGTH_SHORT).show();
                 }
@@ -114,7 +115,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    public void saveClicked (){
+        Users users = new Users (databaseReference.push().getKey(),
+                etName.getText().toString(),
+                etEmail.getText().toString(),
+                /*etCorreo.getText().toString(),*/
+                "url foto");
+        databaseReference.child("users").child(users.getId()).setValue(users);
+    }
 
+    private void goLoginActivity(){
+        Intent i = new Intent(RegisterActivity.this,LoginActivity.class);
+        startActivity(i);
+        finish();
+    }
 
 
 }

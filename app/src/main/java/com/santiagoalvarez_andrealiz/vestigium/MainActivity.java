@@ -41,6 +41,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+
+        if (firebaseUser == null){ //No user login
+            Intent i =new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
+
         tvUseremail = findViewById(R.id.tvUseremail);
         ivFoto = findViewById(R.id.ivFoto);
         inicializar();
@@ -55,34 +64,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         int id = item.getItemId();
 
         if (id == R.id.mProfile) {
-            user = getIntent().getExtras().getString("user");
-            name = getIntent().getExtras().getString("name");
-            pass = getIntent().getExtras().getString("pass");
-            lastname = getIntent().getExtras().getString("lastname");
-            email = getIntent().getExtras().getString("email");
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("name", name);
-            intent.putExtra("pass", pass);
-            intent.putExtra("lastname", lastname);
-            intent.putExtra("email", email);
-            startActivity(intent);
-            finish();
+            goProfileActivity();
         }
         if (id == R.id.mExit) {
-            user = getIntent().getExtras().getString("user");
-            name = getIntent().getExtras().getString("name");
-            pass = getIntent().getExtras().getString("pass");
-            lastname = getIntent().getExtras().getString("lastname");
-            email = getIntent().getExtras().getString("email");
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            intent.putExtra("user", user);
-            intent.putExtra("name", name);
-            intent.putExtra("pass", pass);
-            intent.putExtra("lastname", lastname);
-            intent.putExtra("email", email);
-            startActivity(intent);
-            finish();
+            goLoginActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -137,6 +122,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
     private void goLoginActivity(){
         Intent i = new Intent(MainActivity.this,LoginActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    private void goProfileActivity(){
+        Intent i = new Intent(MainActivity.this,ProfileActivity.class);
         startActivity(i);
         finish();
     }
