@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,10 +37,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private TextView tvUseremail;
     private ImageView ivFoto;
 
+    private Button maps;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        maps = findViewById(R.id.btMaps);
 
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -171,4 +176,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
+    public void mapsclicked(View view) {
+        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+        startActivity(intent);
+    }
 }

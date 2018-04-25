@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                Intent i = new Intent().setClass(SplashActivity.this, LoginActivity.class);
+                Intent i = new Intent().setClass(SplashActivity.this, LoginActivity/*PruebaDBActivity*/.class);
                 startActivity(i);
                 finish();
             }

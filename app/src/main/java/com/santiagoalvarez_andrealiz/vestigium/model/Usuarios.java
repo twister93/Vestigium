@@ -6,6 +6,12 @@ public class Usuarios {
 
     public Usuarios() {//Por defecto Firebase lo exige
     }
+    public Usuarios(String id, String nombre, String telefono, String correo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.correo = correo;
+    }
 
     public Usuarios(String id, String nombre, String telefono, String correo, String fotos) {
         this.id = id;
