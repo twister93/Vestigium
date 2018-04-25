@@ -9,17 +9,17 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre"
+        android:hint="Nombre"
         android:id="@+id/etNombre"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Correo"
+        android:hint="Correo"
         android:id="@+id/etCorreo"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Telefono"
+        android:hint="Telefono"
         android:id="@+id/etTelefono"/>
     <Button
         android:layout_width="match_parent"

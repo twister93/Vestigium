@@ -42,4 +42,11 @@
         android:onClick="logoutclicked"
         />
 
+    <Button
+        android:id="@+id/btMaps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/masps"
+        android:onClick="mapsclicked"
+        />
 </LinearLayout>

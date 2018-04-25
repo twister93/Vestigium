@@ -3,7 +3,11 @@
     package="com.santiagoalvarez_andrealiz.vestigium">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Permisos de ubicación por wifi o datos -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Permisos de ubicación GPS y WIFI o Datos Moviles -->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +30,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PruebaDBActivity"></activity>
+        <activity android:name=".PruebaDBActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCikJuFSSCQF-o9zUem_K5UL9nzKrKY0Rg" />
+        <!-- Nota: Como se mostró anteriormente, com.google.android.geo.API_KEY es el nombre de metadatos recomendado para la clave de API. Una clave con este nombre se puede usar para autenticar en múltiples API basadas en Google Maps en la plataforma Android, incluida la Google Maps Android API. En lo que respecta a compatibilidad con versiones anteriores, la API también admite el nombre com.google.android.maps.v2.API_KEY. Este nombre heredado permite la autenticación en la Android Maps API v2 únicamente. Una aplicación puede especificar solo uno de los nombres de metadatos de la clave de API. Si se especifican ambos, la API retorna una excepción -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
     </application>
 
 </manifest>
