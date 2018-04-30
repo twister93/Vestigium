@@ -147,8 +147,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(LoginActivity.this, "Cuenta Creada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
                     goMainActivity();
+                    saveClicked();
                 }else{
                     //if(task.getException().equals())
                     Log.d("Facebook Error:",task.getException().toString());
@@ -168,6 +169,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             goMainActivity();
+                            saveClicked();
                         }
                     });
         }else {
@@ -257,6 +259,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+    }
+    public void saveClicked(){
+        FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Log.d("Existe: ", "SI");
+                } else {
+                    Log.d("Existe","NO");
+                    Users users = new Users(firebaseUser.getUid(),  firebaseUser.getDisplayName(), firebaseUser.getEmail(), "url foto");
+                    databaseReference.child("users").child(firebaseUser.getUid()).setValue(users);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void crearUsuario(){

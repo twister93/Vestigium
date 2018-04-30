@@ -91,7 +91,7 @@ public class AlbumDBActivity extends AppCompatActivity {
                 etFavorite.getText().toString());
         Log.d("FirebaseSave", "Entra al guardar");
 
-        databaseReference.child("albums").child(albums.getAlbumName().setValue(albums);
+        databaseReference.child("albums").child(albums.getAlbumName()).setValue(albums);
     }
     //Adaptador para pasarle el listado de las personas
     class AlbumAdapter extends ArrayAdapter<Albums>{
@@ -106,20 +106,20 @@ public class AlbumDBActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View item = inflater.inflate(R.layout.list_item,null);
 
-            Albums album = getItem(position);
+            Albums albums = getItem(position);
 
-            TextView nombre = item.findViewById(R.id.tvName);
-            nombre.setText(albums.getAlbumName());
+            TextView albumName = item.findViewById(R.id.tvName);
+            albumName.setText(albums.getAlbumName());
 
-            TextView correo = item.findViewById(R.id.tvEmail);
-            correo.setText(usuarios.getCorreo());
+            TextView creationD = item.findViewById(R.id.tvEmail);
+            creationD.setText(albums.getCreationDate());
 
-            TextView telefono = item.findViewById(R.id.tvphone);
-            telefono.setText(usuarios.getTelefono());
+            TextView favorite = item.findViewById(R.id.tvphone);
+            favorite.setText(albums.getFavorite());
 
             return item;
         }
     }
 }
 
-}
+
