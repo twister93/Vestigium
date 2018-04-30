@@ -52,7 +52,7 @@ import java.security.NoSuchAlgorithmException;
 
 
 /**
- * Created by andrealiz on 3/04/18.
+ * Created by andrealiz on 3/04/18. Branch TB_06
  */
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
