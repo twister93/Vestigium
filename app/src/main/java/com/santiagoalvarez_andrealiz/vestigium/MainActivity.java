@@ -177,7 +177,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     public void mapsclicked(View view) {
-        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-        startActivity(intent);
+        Intent i = new Intent().setClass(MainActivity.this, /*LoginActivity*/AlbumDBActivity.class);
+        startActivity(i);
+        /*Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+        startActivity(intent);*/
     }
 }
