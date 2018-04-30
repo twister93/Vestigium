@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             goProfileActivity();
         }
         if (id == R.id.mExit) {
-            goLoginActivity();
+            logout();
         }
 
         return super.onOptionsItemSelected(item);

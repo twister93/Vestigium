@@ -98,6 +98,8 @@ public class PruebaDBActivity extends AppCompatActivity {
                 etTelefono.getText().toString(),
                 etCorreo.getText().toString(),
                 "url foto");
+
+
         databaseReference.child("usuarios").child(usuarios.getId()).setValue(usuarios);
     }
 
