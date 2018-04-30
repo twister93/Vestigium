@@ -1,7 +1,6 @@
 package com.santiagoalvarez_andrealiz.vestigium;
 
 import android.content.Context;
-import android.hardware.usb.UsbInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,58 +20,50 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.santiagoalvarez_andrealiz.vestigium.model.Usuarios;
+import com.santiagoalvarez_andrealiz.vestigium.model.Albums;
 
 import java.util.ArrayList;
 
-public class PruebaDBActivity extends AppCompatActivity {
+public class AlbumDBActivity extends AppCompatActivity {
 
-    private EditText etNombre,etCorreo,etTelefono;
+    private EditText etAlbumName,etCreationD,etFavorite;
     private ListView listView;
-    private ArrayList<String> nombreslist;
-    private ArrayList<Usuarios> usuarioslist;
+    private ArrayList<Albums> albumslist;
     private DatabaseReference databaseReference; //referencia que necesitamos
     private ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prueba_db);
-
-        etNombre = findViewById(R.id.etNombre);
-        etCorreo = findViewById(R.id.etCorreo);
-        etTelefono = findViewById(R.id.etTelefono);
+        setContentView(R.layout.activity_album_db);
+        etAlbumName = findViewById(R.id.etAlbumName);
+        etCreationD = findViewById(R.id.etCreationD);
+        etFavorite = findViewById(R.id.etFavorite);
 
         listView = findViewById(R.id.listView);
 
 
-        // nombreslist = new ArrayList();
-        usuarioslist = new ArrayList<>();
+        albumslist = new ArrayList<>();
 
-       /* arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,nombreslist);
-        listView.setAdapter(arrayAdapter); */
-
-        final UsuarioAdapter usuarioAdapter = new UsuarioAdapter(this, usuarioslist);
-        listView.setAdapter(usuarioAdapter);
+        final AlbumDBActivity.AlbumAdapter albumAdapter = new AlbumDBActivity.AlbumAdapter(this, albumslist);
+        listView.setAdapter(albumAdapter);
 
 
         FirebaseDatabase.getInstance(); //.setPersistenceEnabled(true); //Toma instancia de la base de datos
         databaseReference = FirebaseDatabase.getInstance().getReference();
         //metodo para cargar los datos desde la base de datos
-        databaseReference.child("usuarios").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("albums").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //nombreslist.clear();
-                usuarioslist.clear();
+                albumslist.clear();
                 if (dataSnapshot.exists()){
                     for (DataSnapshot snapshot:dataSnapshot.getChildren()){
-                        Usuarios usuarios = snapshot.getValue(Usuarios.class);
-                        Log.d("nombre",usuarios.getNombre());
-                 //       nombreslist.add(usuarios.getNombre());
-                        usuarioslist.add(usuarios);
+                        Albums albums = snapshot.getValue(Albums.class);
+                        Log.d("Album name",albums.getAlbumName());
+                        albumslist.add(albums);
                     }
                 }
-                usuarioAdapter.notifyDataSetChanged();
+                albumAdapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -83,30 +74,29 @@ public class PruebaDBActivity extends AppCompatActivity {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                String uid = usuarioslist.get(position).getId();
-                usuarioslist.remove(position);
-                nombreslist.remove(position);
-                databaseReference.child("usuarios").child(uid).removeValue();
+                String uid = albumslist.get(position).getAlbumId();
+                albumslist.remove(position);
+                albumslist.remove(position);
+                databaseReference.child("albums").child(uid).removeValue();
                 return false;
             }
         });
-    }
 
+    }
     public void guardarClicked (View view){
         //id - databaseReference.push().getKey()
-        Usuarios usuarios = new Usuarios (databaseReference.push().getKey(),
-                etNombre.getText().toString(),
-                etTelefono.getText().toString(),
-                etCorreo.getText().toString(),
-                "url foto");
+        Albums albums= new Albums (databaseReference.push().getKey(),
+                etAlbumName.getText().toString(),
+                etCreationD.getText().toString(),
+                etFavorite.getText().toString());
         Log.d("FirebaseSave", "Entra al guardar");
 
-        databaseReference.child("usuarios").child(usuarios.getId()).setValue(usuarios);
+        databaseReference.child("albums").child(albums.getAlbumName()).setValue(albums);
     }
     //Adaptador para pasarle el listado de las personas
-    class UsuarioAdapter extends ArrayAdapter<Usuarios>{
+    class AlbumAdapter extends ArrayAdapter<Albums>{
 
-        public UsuarioAdapter(@NonNull Context context, ArrayList<Usuarios> data){
+        public AlbumAdapter(@NonNull Context context, ArrayList<Albums> data){
             super(context, R.layout.list_item, data);
         }
         @NonNull
@@ -116,18 +106,20 @@ public class PruebaDBActivity extends AppCompatActivity {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             View item = inflater.inflate(R.layout.list_item,null);
 
-            Usuarios usuarios = getItem(position);
+            Albums albums = getItem(position);
 
-            TextView nombre = item.findViewById(R.id.tvName);
-            nombre.setText(usuarios.getNombre());
+            TextView albumName = item.findViewById(R.id.tvName);
+            albumName.setText(albums.getAlbumName());
 
-            TextView correo = item.findViewById(R.id.tvEmail);
-            correo.setText(usuarios.getCorreo());
+            TextView creationD = item.findViewById(R.id.tvEmail);
+            creationD.setText(albums.getCreationDate());
 
-            TextView telefono = item.findViewById(R.id.tvphone);
-            telefono.setText(usuarios.getTelefono());
+            TextView favorite = item.findViewById(R.id.tvphone);
+            favorite.setText(albums.getFavorite());
 
             return item;
         }
     }
 }
+
+

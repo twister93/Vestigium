@@ -18,8 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.santiagoalvarez_andrealiz.vestigium.model.Users;
 import com.santiagoalvarez_andrealiz.vestigium.model.Usuarios;
 
@@ -115,19 +118,45 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void saveClicked (){
+   /*public void saveClicked (){
         Users users = new Users (databaseReference.push().getKey(),
                 etName.getText().toString(),
                 etEmail.getText().toString(),
                 /*etCorreo.getText().toString(),*/
-                "url foto");
-        databaseReference.child("users").child(users.getId()).setValue(users);
-    }
+                /*"url foto");
+      /* databaseReference.child("users").child(users.getId()).setValue(users);
+    }*/
 
     private void goLoginActivity(){
         Intent i = new Intent(RegisterActivity.this,LoginActivity.class);
         startActivity(i);
         finish();
+    }
+    public void saveClicked() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Log.d("Existe: ", "SI");
+                } else {
+                    Log.d("Existe", "NO");
+                    Users users = new Users(firebaseUser.getUid(),
+                            etName.getText().toString(),
+                            etEmail.getText().toString(),
+                            "url foto");
+                    databaseReference.child("users").child(firebaseUser.getUid()).setValue(users);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
