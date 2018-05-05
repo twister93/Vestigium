@@ -15,12 +15,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagoalvarez_andrealiz.vestigium.model.Albums;
+import com.santiagoalvarez_andrealiz.vestigium.model.Points;
 
 import java.util.ArrayList;
 
@@ -84,14 +87,21 @@ public class AlbumDBActivity extends AppCompatActivity {
 
     }
     public void guardarClicked (View view){
+        FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
         //id - databaseReference.push().getKey()
         Albums albums= new Albums (databaseReference.push().getKey(),
                 etAlbumName.getText().toString(),
                 etCreationD.getText().toString(),
                 etFavorite.getText().toString());
         Log.d("FirebaseSave", "Entra al guardar");
+        databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).setValue(albums);
 
-        databaseReference.child("albums").child(albums.getAlbumName()).setValue(albums);
+        Points points = new Points(databaseReference.push().getKey(),
+                "-75.5684253","6.2639381");
+        databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).child("points").child(points.getPointId()).setValue(points);
     }
     //Adaptador para pasarle el listado de las personas
     class AlbumAdapter extends ArrayAdapter<Albums>{

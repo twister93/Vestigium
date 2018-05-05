@@ -302,9 +302,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 } else {
                     Log.d("Existe","NO");
                     Users users = new Users(firebaseUser.getUid(),  firebaseUser.getDisplayName(), firebaseUser.getEmail(), "url foto");
-                    Albums albums = new Albums("1","2","3","4");
                     databaseReference.child("users").child(firebaseUser.getUid()).setValue(users);
-                    databaseReference.child("users").child(firebaseUser.getUid()).child("albums").setValue(albums);
+
                 }
             }
 

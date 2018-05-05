@@ -1,11 +1,68 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/app_bar</item>
-        <item name="colorAccent">@color/gray</item>
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light">
+
+        <item name="colorPrimary">@color/app_bar</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/app_bar</item>
+    </style>-->
+    <!-- Customize your theme here. -->
+
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="titleTextStyle">@style/MyTitleTextStyle</item>
+    </style>
+
+    <style name="MyTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/fitamint_script</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+<!--
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+    </style>
+
+    <style name="TextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/liberationsans_italic</item>
+        <item name="android:colorAccent">@color/black</item>
+    </style>
+
+    <style name="EditTextStyle" parent="android:Widget.EditText">
+        <item name="android:fontFamily">@font/fitamint_script</item>
+        <item name="android:colorAccent">@color/black</item>
+    </style>
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:textColor">@color/app_bar</item>
+
+    </style>
+
+    <style name="ButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/liberationsans_regular</item>
+    </style>
+    -->
+<!--
+    <style name="AppTheme" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+
+    </style>
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/app_bar</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+    </style>
+    <style name="MyActionBarTitleText"
+        parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/red</item>
+    </style> -->
 
 </resources>
