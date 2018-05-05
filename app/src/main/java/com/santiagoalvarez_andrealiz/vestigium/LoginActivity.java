@@ -44,6 +44,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.santiagoalvarez_andrealiz.vestigium.model.Albums;
 import com.santiagoalvarez_andrealiz.vestigium.model.Users;
 import com.santiagoalvarez_andrealiz.vestigium.model.Usuarios;
 
@@ -260,30 +261,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
-    public void saveClicked(){
-        FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
-        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    Log.d("Existe: ", "SI");
-                } else {
-                    Log.d("Existe","NO");
-                    Users users = new Users(firebaseUser.getUid(),  firebaseUser.getDisplayName(), firebaseUser.getEmail(), "url foto");
-                    databaseReference.child("users").child(firebaseUser.getUid()).setValue(users);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     private void crearUsuario(){
         FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
@@ -311,6 +289,31 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
+    public void saveClicked(){
+        FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Log.d("Existe: ", "SI");
+                } else {
+                    Log.d("Existe","NO");
+                    Users users = new Users(firebaseUser.getUid(),  firebaseUser.getDisplayName(), firebaseUser.getEmail(), "url foto");
+                    databaseReference.child("users").child(firebaseUser.getUid()).setValue(users);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
     @Override
     protected void onStart() {

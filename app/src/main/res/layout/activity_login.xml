@@ -19,29 +19,27 @@
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="cursive"
+        android:fontFamily="@font/liberationsans_italic"
         android:gravity="center"
         android:hint="@string/email3"
         android:inputType="textEmailAddress"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textSize="20sp"/>
 
     <EditText
         android:id="@+id/etPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="cursive"
+        android:fontFamily="@font/liberationsans_italic"
         android:gravity="center"
         android:hint="@string/pass"
         android:inputType="textPassword"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_medium"
+        android:fontFamily="@font/liberationsans_regular"
         android:onClick="loginclicked"
         android:text="@string/log"
         android:textAllCaps="false"
@@ -56,6 +54,7 @@
         android:gravity="center"
         android:onClick="register"
         android:text="@string/register"
+        android:textSize="20sp"
         android:textColor="@color/blue" />
     <com.google.android.gms.common.SignInButton
         android:layout_width="wrap_content"
