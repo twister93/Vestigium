@@ -107,11 +107,11 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) { //Informa si fue exitosa la creación del usuario en Firebase o no
                 if (task.isSuccessful()){
-                    Toast.makeText(RegisterActivity.this,"Cuenta creada", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(RegisterActivity.this,"Cuenta creada", Toast.LENGTH_SHORT).show();
                     goLoginActivity();
                     saveClicked();
                 }else {
-                    Toast.makeText(RegisterActivity.this,"Error al crear cuenta"/*task.getException().toString()*/, Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(RegisterActivity.this,"Error al crear cuenta"/*task.getException().toString()*/, Toast.LENGTH_SHORT).show();
                 }
             }
         });
