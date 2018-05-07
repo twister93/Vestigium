@@ -205,7 +205,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void goMainActivity(){
-        Intent i = new Intent(LoginActivity.this,MainActivity/*PruebaDBActivity*/.class);
+        Intent i = new Intent(LoginActivity.this,/*MainActivity*/AlbumDBActivity.class);
         startActivity(i);
         finish();
     }
@@ -224,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent i = new Intent(LoginActivity.this, /*MainActivity*/AlbumDBActivity.class);
                         startActivity(i);
                         finish();
                     } else {
@@ -246,6 +246,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 if (firebaseUser != null) {//alguien está logueado
                     Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getDisplayName());
                     Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getEmail());
+
+                    Intent i = new Intent(LoginActivity.this,AlbumDBActivity.class);
+                    startActivity(i);
+                    finish();
                 } else {
                     Log.d("FirebaseUser", "El usuario ha cerrado sesión");
                 }

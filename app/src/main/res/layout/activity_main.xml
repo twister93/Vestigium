@@ -42,11 +42,41 @@
         android:onClick="logoutclicked"
         />
 
-    <Button
+    <!--<Button
         android:id="@+id/btMaps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/masps"
         android:onClick="mapsclicked"
-        />
+        />-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_weight="1">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/btAlbum"
+            android:drawableLeft="@drawable/ic_image"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:onClick="goalbumActivity"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/btHome"
+            android:drawableBottom="@drawable/ic_home"
+            android:layout_weight="1"
+            android:onClick="gohomeActivity"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/btProfile"
+            android:drawableRight="@drawable/ic_account_box"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>

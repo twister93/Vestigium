@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        maps = findViewById(R.id.btMaps);
+        //maps = findViewById(R.id.btMaps);
 
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -176,10 +176,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     }
 
-    public void mapsclicked(View view) {
-        Intent i = new Intent().setClass(MainActivity.this, /*LoginActivity*/AlbumDBActivity.class);
+    /*public void mapsclicked(View view) {
+        Intent i = new Intent().setClass(MainActivity.this,AlbumDBActivity.class);
         startActivity(i);
-        /*Intent intent = new Intent(MainActivity.this,MapsActivity.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+        startActivity(intent);
+    }*/
+
+    public void goalbumActivity(View view) {
+        Intent i = new Intent(MainActivity.this,AlbumsActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    public void gohomeActivity(View view) {
+        Intent i = new Intent(MainActivity.this,AlbumDBActivity.class);
+        startActivity(i);
+        finish();
     }
 }

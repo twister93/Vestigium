@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,49 +23,40 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.santiagoalvarez_andrealiz.vestigium.model.Albums;
-import com.santiagoalvarez_andrealiz.vestigium.model.Points;
 
 import java.util.ArrayList;
 
-public class AlbumDBActivity extends AppCompatActivity {
-
-    private EditText etAlbumName,etCreationD,etFavorite;
+public class AlbumsActivity extends AppCompatActivity {
+    //Para visualizar información en Database
     private ListView listView;
     private ArrayList<Albums> albumslist;
     private DatabaseReference databaseReference; //referencia que necesitamos
-    private ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_album_db);
-        etAlbumName = findViewById(R.id.etAlbumName);
-        etCreationD = findViewById(R.id.etCreationD);
-        etFavorite = findViewById(R.id.etFavorite);
+        setContentView(R.layout.activity_albums);
 
         listView = findViewById(R.id.listView);
-        //------------------------------------------
-        //Esto chequea si el usuario está logueado
+
+        //-----------------Chequeo de usuario logueado------------
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser == null){ //No user login
-            Intent i =new Intent(AlbumDBActivity.this, LoginActivity.class);
+            Intent i =new Intent(AlbumsActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
         }
-        //--------------------------------------------------
 
+        //List View
         albumslist = new ArrayList<>();
-
-        final AlbumDBActivity.AlbumAdapter albumAdapter = new AlbumDBActivity.AlbumAdapter(this, albumslist);
+        final AlbumsActivity.AlbumAdapter albumAdapter = new AlbumsActivity.AlbumAdapter(this, albumslist);
         listView.setAdapter(albumAdapter);
-
-
         FirebaseDatabase.getInstance(); //.setPersistenceEnabled(true); //Toma instancia de la base de datos
         databaseReference = FirebaseDatabase.getInstance().getReference();
         //metodo para cargar los datos desde la base de datos
-        databaseReference.child("albums").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("users").child("albums").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 albumslist.clear();
@@ -96,38 +86,8 @@ public class AlbumDBActivity extends AppCompatActivity {
             }
         });
 
+
     }
-    public void guardarClicked (View view){
-        FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
-        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        //id - databaseReference.push().getKey()
-        Albums albums= new Albums (databaseReference.push().getKey(),
-                etAlbumName.getText().toString(),
-                etCreationD.getText().toString(),
-                etFavorite.getText().toString());
-        Log.d("FirebaseSave", "Entra al guardar");
-        databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).setValue(albums);
-
-        Points points = new Points(databaseReference.push().getKey(),
-                "-75.5684253","6.2639381");
-        databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).child("points").child(points.getPointId()).setValue(points);
-    }
-
-    // envía a main porque allí tenemos la info del profile
-    public void goprofileActivity(View view) {
-        Intent i = new Intent(AlbumDBActivity.this,MainActivity.class);
-        startActivity(i);
-        finish();
-    }
-
-    public void goalbumActivity(View view) {
-        Intent i = new Intent(AlbumDBActivity.this,AlbumsActivity.class);
-        startActivity(i);
-        finish();
-    }
-
     //Adaptador para pasarle el listado de las personas
     class AlbumAdapter extends ArrayAdapter<Albums>{
 
@@ -155,6 +115,16 @@ public class AlbumDBActivity extends AppCompatActivity {
             return item;
         }
     }
+
+    public void gohomeActivity(View view) {
+        Intent i = new Intent(AlbumsActivity.this,AlbumDBActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    public void goprofileActivity(View view) {
+        Intent i = new Intent(AlbumsActivity.this,MainActivity.class);
+        startActivity(i);
+        finish();
+    }
 }
-
-
