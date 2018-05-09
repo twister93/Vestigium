@@ -3,10 +3,11 @@ package com.santiagoalvarez_andrealiz.vestigium;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,53 +24,76 @@ import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by andrealiz on 3/04/18.
+ * Created by andrealiz on 5/05/18.
  */
 
-public class ProfileActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class BottomActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    private TextView mTextMessage;
+    FragmentManager fm;
+    FragmentTransaction ft;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     private GoogleApiClient googleApiClient;
 
-    String user = "*", pass, name, lastname, email;
-    TextView etNameP, etLastnameP, etUserP, etEmailP;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_bottom);
 
-        setContentView(R.layout.activity_profile);
+        //mTextMessage = (TextView) findViewById(R.id.message);
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        etNameP = findViewById(R.id.etNameP);
-        etLastnameP = findViewById(R.id.etLastnameP);
-        etUserP = findViewById(R.id.etUserP);
-        etEmailP = findViewById(R.id.etEmailP);
+        fm = getSupportFragmentManager();
+        ft = fm.beginTransaction();
 
-        user = getIntent().getExtras().getString("user");
-        name = getIntent().getExtras().getString("name");
-        pass = getIntent().getExtras().getString("pass");
-        lastname = getIntent().getExtras().getString("lastname");
-        email = getIntent().getExtras().getString("email");
+        MainFragment fragment = new MainFragment();
+        ft.add(android.R.id.content, fragment).commit();
 
-        etNameP.setText(name);
-        etLastnameP.setText(lastname);
-        etUserP.setText(user);
-        etEmailP.setText(email);
 
-        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+       /* final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser == null){ //No user login
-            Intent i =new Intent(ProfileActivity.this, LoginActivity.class);
+            Intent i =new Intent(BottomActivity.this, LoginActivity.class);
             startActivity(i);
             finish();
         }
 
-        inicializar();
+        inicializar();*/
+
     }
 
-    private void inicializar() {
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            ft = fm.beginTransaction();
+
+            switch (item.getItemId()) {
+                case R.id.mAlbum:
+                    AlbumFragment frag = new AlbumFragment();
+                    ft.replace(android.R.id.content, frag).commit();
+                    return true;
+                case R.id.mHome:
+                    MainFragment frag2 = new MainFragment();
+                    ft.replace(android.R.id.content, frag2).commit();
+                    return true;
+                case R.id.mProfile:
+                    ProfileFragment frag3 = new ProfileFragment();
+                    ft.replace(android.R.id.content, frag3).commit();
+                    return true;
+            }
+            return false;
+        }
+    };
+
+  /* private void inicializar() {
         firebaseAuth = FirebaseAuth.getInstance(); //instancia el objeto firebaseauth
         authStateListener = new FirebaseAuth.AuthStateListener() { //inicializa el listener
             @Override
@@ -78,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
                 if (firebaseUser != null) {//alguien está logueado
                     //tvUseremail.setText("Correo Usuario: "+firebaseUser.getEmail());
                     //Picasso.get().load(firebaseUser.getPhotoUrl()).into(ivFoto);
+                    Log.d("FirebaseUser", "Usuario logueado" + firebaseUser.getEmail());
                 } else {
                     Log.d("FirebaseUser", "El usuario ha cerrado sesión");
                 }
@@ -94,27 +119,9 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-    }
+    } */
 
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.mHome) {
-            onBackPressed();
-        }
-        if (id == R.id.mExit) {
-            logout();
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void logout(){
+    /*public void logout(){
         firebaseAuth.signOut();
         if (Auth.GoogleSignInApi != null){
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
@@ -123,7 +130,7 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
                     if (status.isSuccess()){
                         goLoginActivity();
                     }else {
-                        Toast.makeText(ProfileActivity.this,"Error cerrando sesión con Google",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BottomActivity.this,"Error cerrando sesión con Google",Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -131,68 +138,67 @@ public class ProfileActivity extends AppCompatActivity implements GoogleApiClien
         if (LoginManager.getInstance() != null){
             LoginManager.getInstance().logOut();
         }
-    }
-    private void goLoginActivity(){
-        Intent i = new Intent(ProfileActivity.this,LoginActivity.class);
+    }*/
+    /*private void goLoginActivity(){
+        Intent i = new Intent(BottomActivity.this,LoginActivity.class);
         startActivity(i);
         finish();
-    }
+    } */
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         finish();
         Log.d("Metodo", "finish_activity");
         super.onBackPressed();
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onStart() {
         //onBackPressed();
         super.onStart();
         firebaseAuth.addAuthStateListener(authStateListener);
         Log.d("Metodo", "OnStart_Profile");
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(authStateListener);
         googleApiClient.disconnect();
         Log.d("Metodo", "OnStop_Profile");
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onPause() {
         super.onPause();
         googleApiClient.stopAutoManage(this);
         googleApiClient.disconnect();
         Log.d("Metodo", "OnPause_Profile");
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
         Log.d("Metodo", "OnResume_Profile");
         googleApiClient.connect();
-    }
-
-    /*@Override
+    }*/
+/*
+   @Override
     protected void onRestart() {
         super.onRestart();
         Log.d("Metodo", "OnRestart_Profile");
-    }*/
+    } */
 
-    @Override
+   /* @Override
     protected void onDestroy() {
         super.onDestroy();
         googleApiClient.stopAutoManage(this);
         googleApiClient.disconnect();
         Log.d("Metodo", "OnDestroy_Profile");
-    }
+    } */
 
-    @Override
+   @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
 }

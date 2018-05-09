@@ -205,7 +205,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void goMainActivity(){
-        Intent i = new Intent(LoginActivity.this,/*MainActivity*/AlbumDBActivity.class);
+        Intent i = new Intent(LoginActivity.this,/*MainActivity*//*AlbumDBActivity*/BottomActivity.class);
         startActivity(i);
         finish();
     }
@@ -224,9 +224,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Intent i = new Intent(LoginActivity.this, /*MainActivity*/AlbumDBActivity.class);
-                        startActivity(i);
-                        finish();
+                        goMainActivity();
                     } else {
                         Toast.makeText(LoginActivity.this, "Error en inicio de sesión" + task.getException().toString(), Toast.LENGTH_SHORT).show();
                         Log.d("vacio: ", "Usuario no registrado");
