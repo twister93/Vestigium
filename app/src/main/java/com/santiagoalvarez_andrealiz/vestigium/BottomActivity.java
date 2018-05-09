@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,11 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        Menu bottomNavigationViewMenu = navigation.getMenu();
+        bottomNavigationViewMenu.findItem(R.id.mAlbum).setChecked(false);
+        bottomNavigationViewMenu.findItem(R.id.mHome).setChecked(true);
+
 
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();

@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getDisplayName());
                     Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getEmail());
 
-                    Intent i = new Intent(LoginActivity.this,AlbumDBActivity.class);
+                    Intent i = new Intent(LoginActivity.this,BottomActivity.class);
                     startActivity(i);
                     finish();
                 } else {

@@ -21,27 +21,27 @@
             android:value="@string/facebook_app_id" />
 
 
-       <!-- <activity android:name=".BottomActivity" /> -->
-      <!--  <activity android:name=".MainActivity" /> -->
-      <!-- <activity android:name=".LoginActivity" /> -->
-       <!-- <activity android:name=".ProfileActivity" /> -->
-       <!-- <activity android:name=".RegisterActivity" /> -->
-       <!--<activity android:name=".SplashActivity">
+        <activity android:name=".BottomActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
-       <activity
+        </activity>
+       <!--<activity
             android:name=".BottomActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-        </activity>
-        <!--<activity android:name=".PruebaDBActivity" /> -->
+        </activity>-->
+        <activity android:name=".PruebaDBActivity" />
 
 
         <meta-data
@@ -52,11 +52,11 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!--<activity
+        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".AlbumDBActivity" />
-        <activity android:name=".AlbumsActivity"></activity> -->
+        <activity android:name=".AlbumsActivity"></activity>
     </application>
 
 </manifest>
