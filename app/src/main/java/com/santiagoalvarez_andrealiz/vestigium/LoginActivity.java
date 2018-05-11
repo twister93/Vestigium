@@ -178,6 +178,33 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    private void inicializar() {
+        //Inicialización con Firebase Email y Contraseña
+        firebaseAuth = FirebaseAuth.getInstance(); //instancia el objeto firebaseauth
+        authStateListener = new FirebaseAuth.AuthStateListener() { //inicializa el listener
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser(); // carga los datos del usuario una vez logueado
+                if (firebaseUser != null) {//alguien está logueado
+                    Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getDisplayName());
+                    Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getEmail());
+                    goMainActivity();
+                } else {
+                    Log.d("FirebaseUser", "El usuario ha cerrado sesión");
+                }
+            }
+        };
+        //Inicialización con cuenta Google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
+
     public void register(View view) {
         int id = view.getId();
 
@@ -224,7 +251,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        goMainActivity();
+                       goMainActivity();
                     } else {
                         Toast.makeText(LoginActivity.this, "Error en inicio de sesión" + task.getException().toString(), Toast.LENGTH_SHORT).show();
                         Log.d("vacio: ", "Usuario no registrado");
@@ -234,35 +261,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    private void inicializar() {
-        //Inicialización con Firebase Email y Contraseña
-        firebaseAuth = FirebaseAuth.getInstance(); //instancia el objeto firebaseauth
-        authStateListener = new FirebaseAuth.AuthStateListener() { //inicializa el listener
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser(); // carga los datos del usuario una vez logueado
-                if (firebaseUser != null) {//alguien está logueado
-                    Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getDisplayName());
-                    Log.d("FirebaseUser", "Usuario Logueado: " + firebaseUser.getEmail());
-
-                    Intent i = new Intent(LoginActivity.this,BottomActivity.class);
-                    startActivity(i);
-                    finish();
-                } else {
-                    Log.d("FirebaseUser", "El usuario ha cerrado sesión");
-                }
-            }
-        };
-        //Inicialización con cuenta Google
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
 
 
     private void crearUsuario(){
@@ -318,22 +316,55 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @Override
+    public void onBackPressed() {
+        finish();
+        Log.d("Metodo", "finish_Login");
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onStart() {
+        //onBackPressed();
         super.onStart();
         firebaseAuth.addAuthStateListener(authStateListener);
+        Log.d("Metodo", "OnStart_Profile");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(authStateListener);
+        googleApiClient.disconnect();
+        Log.d("Metodo", "OnStop_Profile");
     }
 
     @Override
-    public void onBackPressed() {
-        finish();
-        Log.d("Metodo", "finish_Login");
-        super.onBackPressed();
+    protected void onPause() {
+        super.onPause();
+        googleApiClient.stopAutoManage(this);
+        googleApiClient.disconnect();
+        Log.d("Metodo", "OnPause_Profile");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("Metodo", "OnResume_Profile");
+        googleApiClient.connect();
+    }
+
+    /*@Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("Metodo", "OnRestart_Profile");
+    }*/
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        googleApiClient.stopAutoManage(this);
+        googleApiClient.disconnect();
+        Log.d("Metodo", "OnDestroy_Profile");
     }
 
     @Override

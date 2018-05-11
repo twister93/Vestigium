@@ -15,11 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
 
         <activity android:name=".BottomActivity" />
         <activity android:name=".MainActivity" />
@@ -33,16 +31,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       <!--<activity
+        <!--
+        <activity
             android:name=".BottomActivity">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-        </activity>-->
+        </activity>
+        -->
         <activity android:name=".PruebaDBActivity" />
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -56,7 +55,9 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".AlbumDBActivity" />
-        <activity android:name=".AlbumsActivity"></activity>
+        <activity android:name=".AlbumsActivity" />
+        <activity android:name=".SettingFragment" />
+        <activity android:name=".MapsFragment"></activity>
     </application>
 
 </manifest>

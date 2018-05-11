@@ -6,10 +6,15 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,11 +43,15 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
     private FirebaseAuth.AuthStateListener authStateListener;
     private GoogleApiClient googleApiClient;
 
+    Button btConfig;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.abs_layout);
 
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -60,7 +69,7 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         ft.add(android.R.id.content, fragment).commit();
 
 
-       /* final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
         if (firebaseUser == null){ //No user login
@@ -69,10 +78,7 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
             finish();
         }
 
-        inicializar();*/
-
     }
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -99,35 +105,25 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         }
     };
 
-  /* private void inicializar() {
-        firebaseAuth = FirebaseAuth.getInstance(); //instancia el objeto firebaseauth
-        authStateListener = new FirebaseAuth.AuthStateListener() { //inicializa el listener
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser firebaseUser = firebaseAuth.getCurrentUser(); // carga los datos del usuario una vez logueado
-                if (firebaseUser != null) {//alguien está logueado
-                    //tvUseremail.setText("Correo Usuario: "+firebaseUser.getEmail());
-                    //Picasso.get().load(firebaseUser.getPhotoUrl()).into(ivFoto);
-                    Log.d("FirebaseUser", "Usuario logueado" + firebaseUser.getEmail());
-                } else {
-                    Log.d("FirebaseUser", "El usuario ha cerrado sesión");
-                }
-            }
-        };
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
 
-        //Inicialización con cuenta Google
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this,this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        ft = fm.beginTransaction();
 
-    } */
+        if (id == R.id.mSetting) {
+            SettingFragment frag = new SettingFragment();
+            ft.replace(android.R.id.content, frag).commit();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-    /*public void logout(){
+    /* public void logout(){
         firebaseAuth.signOut();
         if (Auth.GoogleSignInApi != null){
             Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
@@ -144,12 +140,13 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         if (LoginManager.getInstance() != null){
             LoginManager.getInstance().logOut();
         }
-    }*/
-    /*private void goLoginActivity(){
+    }
+
+    private void goLoginActivity(){
         Intent i = new Intent(BottomActivity.this,LoginActivity.class);
         startActivity(i);
         finish();
-    } */
+    }*/
 
    /* @Override
     public void onBackPressed() {
@@ -158,53 +155,56 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         super.onBackPressed();
     }*/
 
-    /*@Override
+   /* @Override
     protected void onStart() {
         //onBackPressed();
         super.onStart();
         firebaseAuth.addAuthStateListener(authStateListener);
         Log.d("Metodo", "OnStart_Profile");
-    }*/
+    }
 
-    /*@Override
+    @Override
     protected void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(authStateListener);
         googleApiClient.disconnect();
         Log.d("Metodo", "OnStop_Profile");
-    }*/
+    }
 
-    /*@Override
+    @Override
     protected void onPause() {
         super.onPause();
         googleApiClient.stopAutoManage(this);
         googleApiClient.disconnect();
         Log.d("Metodo", "OnPause_Profile");
-    }*/
+    }
 
-    /*@Override
+    @Override
     protected void onResume() {
         super.onResume();
         Log.d("Metodo", "OnResume_Profile");
         googleApiClient.connect();
-    }*/
-/*
+    }
+
    @Override
     protected void onRestart() {
         super.onRestart();
         Log.d("Metodo", "OnRestart_Profile");
-    } */
+    }
 
-   /* @Override
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         googleApiClient.stopAutoManage(this);
         googleApiClient.disconnect();
         Log.d("Metodo", "OnDestroy_Profile");
-    } */
+    }*/
 
    @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
+
 }

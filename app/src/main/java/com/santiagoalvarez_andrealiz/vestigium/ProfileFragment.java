@@ -35,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAuth.AuthStateListener authStateListener;
     private GoogleApiClient googleApiClient;
 
+
     String user = "*", pass, name, lastname, email;
     TextView etNameP, etLastnameP, etUserP, etEmailP;
 
@@ -52,14 +53,10 @@ public class ProfileFragment extends Fragment {
         etUserP = view.findViewById(R.id.etUserP);
         etEmailP = view.findViewById(R.id.etEmailP);
 
-        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        /*etNameP.setText(firebaseUser.getDisplayName());
-        etEmailP.setText(firebaseUser.getEmail());*/
-
-
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         return view;
     }
+
 
 }
