@@ -66,6 +66,7 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         ft = fm.beginTransaction();
 
         MainFragment fragment = new MainFragment();
+        //MapsFragment fragment = new MapsFragment();
         ft.add(android.R.id.content, fragment).commit();
 
 
@@ -94,6 +95,7 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
                     return true;
                 case R.id.mHome:
                     MainFragment frag2 = new MainFragment();
+                    //MapsFragment frag2 = new MapsFragment();
                     ft.replace(android.R.id.content, frag2).commit();
                     return true;
                 case R.id.mProfile:

@@ -81,8 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(udea));
         float zoomlevel = 16;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(udea, zoomlevel));
-
-
     }
 
 }
