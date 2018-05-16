@@ -41,7 +41,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         if (status == ConnectionResult.SUCCESS) {
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                    .findFragmentById(R.id.map);
+                    .findFragmentById(R.id.map1);
             mapFragment.getMapAsync(this);
         } else {
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, (Activity) getApplicationContext(), 10);
@@ -49,6 +49,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
         return view;
     }
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -75,5 +77,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(udea));
         float zoomlevel = 16;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(udea, zoomlevel));
+
     }
 }
