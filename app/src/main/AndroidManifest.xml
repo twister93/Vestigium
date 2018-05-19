@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Permisos de ubicación por wifi o datos -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- Permisos de ubicación GPS y WIFI o Datos Moviles -->
     <application
@@ -57,7 +59,14 @@
         <activity android:name=".AlbumDBActivity" />
         <activity android:name=".AlbumsActivity" />
         <activity android:name=".SettingFragment" />
-        <activity android:name=".MapsFragment"></activity>
+        <provider android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.santiagoalvarez_andrealiz.vestigium.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
     </application>
 
 </manifest>
