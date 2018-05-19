@@ -6,4 +6,8 @@
         android:title="Setting"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/mCamera"
+        android:title="Camera"
+        android:icon="@drawable/ic_camera"
+        app:showAsAction="ifRoom"/>
 </menu>
