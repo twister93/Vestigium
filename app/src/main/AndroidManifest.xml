@@ -33,16 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
-        <activity
-            android:name=".BottomActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
-        -->
         <activity android:name=".PruebaDBActivity" />
 
         <meta-data
@@ -58,7 +48,7 @@
             android:label="@string/title_activity_maps" />
         <activity android:name=".AlbumDBActivity" />
         <activity android:name=".AlbumsActivity" />
-        <!--<activity android:name=".SettingFragment" /> -->
+        <activity android:name=".SettingFragment" />
        <provider android:name="android.support.v4.content.FileProvider"
             android:authorities="com.santiagoalvarez_andrealiz.vestigium.fileprovider"
             android:exported="false"

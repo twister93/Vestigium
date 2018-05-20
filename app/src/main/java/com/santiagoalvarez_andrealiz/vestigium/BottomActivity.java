@@ -1,14 +1,20 @@
 package com.santiagoalvarez_andrealiz.vestigium;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
@@ -32,14 +38,26 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.santiagoalvarez_andrealiz.vestigium.model.Albums;
+import com.santiagoalvarez_andrealiz.vestigium.model.Points;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static okhttp3.internal.http.HttpDate.format;
 
 /**
  * Created by andrealiz on 5/05/18.
@@ -56,13 +74,15 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
     private GoogleApiClient googleApiClient;
 
     Button btConfig;
- //-------------------------------------
+    //-------------------------------------
     ImageView iPhoto;
     String mCurrentPhotoPath="";
-    //String name = "";
-
-   // static final int REQUEST_IMAGE_CAPTURE =1;
- //-------------------------------------
+    private Marker marker;
+    double latitude = 0;
+    double longitude = 0;
+    double altitude = 0;
+    private DatabaseReference databaseReference; //referencia que necesitamos
+    //-------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +91,6 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.abs_layout);
 
-        //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -84,10 +103,9 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         ft = fm.beginTransaction();
 
         MainFragment fragment = new MainFragment();
-        //MapsFragment fragment = new MapsFragment();
         ft.add(android.R.id.content, fragment).commit();
 
-
+        //-----------------Chequeo de usuario logueado------------
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -98,7 +116,6 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         }
 //-------------------------------------------------------
         iPhoto = findViewById(R.id.ivLogin);
-        //name = Environment.getExternalStorageDirectory().getPath()+"/foto.jpg";
 //-------------------------------------------------------
 
     }
@@ -117,7 +134,6 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
                     return true;
                 case R.id.mHome:
                     MainFragment frag2 = new MainFragment();
-                    //MapsFragment frag2 = new MapsFragment();
                     ft.replace(android.R.id.content, frag2).commit();
                     return true;
                 case R.id.mProfile:
@@ -149,82 +165,6 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         return super.onOptionsItemSelected(item);
     }
 
-    /* public void logout(){
-        firebaseAuth.signOut();
-        if (Auth.GoogleSignInApi != null){
-            Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
-                @Override
-                public void onResult(@NonNull Status status) {
-                    if (status.isSuccess()){
-                        goLoginActivity();
-                    }else {
-                        Toast.makeText(BottomActivity.this,"Error cerrando sesión con Google",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-        if (LoginManager.getInstance() != null){
-            LoginManager.getInstance().logOut();
-        }
-    }
-
-    private void goLoginActivity(){
-        Intent i = new Intent(BottomActivity.this,LoginActivity.class);
-        startActivity(i);
-        finish();
-    }*/
-
-   /* @Override
-    public void onBackPressed() {
-        finish();
-        Log.d("Metodo", "finish_activity");
-        super.onBackPressed();
-    }*/
-
-   /* @Override
-    protected void onStart() {
-        //onBackPressed();
-        super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
-        Log.d("Metodo", "OnStart_Profile");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        firebaseAuth.removeAuthStateListener(authStateListener);
-        googleApiClient.disconnect();
-        Log.d("Metodo", "OnStop_Profile");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        googleApiClient.stopAutoManage(this);
-        googleApiClient.disconnect();
-        Log.d("Metodo", "OnPause_Profile");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("Metodo", "OnResume_Profile");
-        googleApiClient.connect();
-    }
-
-   @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("Metodo", "OnRestart_Profile");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        googleApiClient.stopAutoManage(this);
-        googleApiClient.disconnect();
-        Log.d("Metodo", "OnDestroy_Profile");
-    }*/
 
     static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -264,12 +204,77 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
+        myLocation();
         return image;
+    }
+
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    private void myLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        updateLocation(location);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1500,0,locationListener);
+
+    }
+
+    private void updateLocation(Location location) {
+        if (location != null) {//Esto se debe hacer siempre para evitar app crash
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            altitude = location.getAltitude();
+
+            //--------------------Acumulando en base de datos
+            FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
+            final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+            String DateTime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            //id - databaseReference.push().getKey()
+            Albums albums= new Albums (databaseReference.push().getKey(),
+                    "Prueba",
+                    DateTime,
+                    "Yes");
+            Log.d("FirebaseSave", "Entra al guardar");
+            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).setValue(albums);
+
+            Points points = new Points(databaseReference.push().getKey(),
+                    Double.toString(latitude),
+                    Double.toString(longitude),
+                    Double.toString(altitude),
+                    mCurrentPhotoPath);
+            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).child("points").child(points.getPointId()).setValue(points);
+            Log.d("FirebaseLocation:", "latitude:"+latitude+" longitude:"+longitude+" altitude: "+altitude);
+        }
+
     }
 
 
 
-   @Override
+    @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
