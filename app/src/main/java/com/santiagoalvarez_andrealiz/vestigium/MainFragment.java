@@ -3,6 +3,7 @@ package com.santiagoalvarez_andrealiz.vestigium;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -33,10 +34,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,9 +55,13 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     GoogleMap map;
     LocationManager locationManager;
 
+    //Minima distancia para toma de puntos
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 metros
     //Minimo tiempo para updates en Milisegundos
     private static final long MIN_TIME_BETWEEN_UPDATES = 1000 * 60 * 1; // 1 minutos
+    //Para dibujar el camino
+    private ArrayList<LatLng> points;
+    Polyline line;
 
 
     public MainFragment(){
@@ -63,6 +71,9 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        points = new ArrayList<LatLng>();
+
         return view;
     }
 
@@ -107,16 +118,21 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                 public void onLocationChanged(Location location) {
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
+                    double altitude = location.getAltitude();
+                    LatLng latLng = new LatLng(latitude, longitude);
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
                         String str = addressList.get(0).getLocality() + ",";
                         str += addressList.get(0).getCountryName();
-                        //Dibujar el marcador
-                        marker(latitude,longitude,str);
                         //Mostrar cada vez que tome un punto
                         String date = new Date().toString();
                         Log.d("map", "take location_NET "+ date);
+                        //Dibujar la linea
+                        points.add(latLng);
+                        redrawLine();
+                        //Dibujar el marcador
+                        marker(latitude,longitude,str);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -144,16 +160,20 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                 public void onLocationChanged(Location location) {
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
+                    LatLng latLng = new LatLng(latitude, longitude);
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
                         List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
                         String str = addressList.get(0).getLocality() + ",";
                         str += addressList.get(0).getCountryName();
-                        //Dibujar el marcador
-                        marker(latitude,longitude,str);
                         //Mostrar cada vez que tome un punto
                         String date = new Date().toString();
                         Log.d("map", "take location_GPS "+ date);
+                        //Dibujar la linea
+                        points.add(latLng);
+                        redrawLine();
+                        //Dibujar el marcador
+                        marker(latitude,longitude,str);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -190,6 +210,22 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
         map.addMarker(new MarkerOptions().position(latLng).title(str).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         float zoomlevel = 16;
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomlevel));
+    }
+
+    public void redrawLine(){
+
+        map.clear();  //clears all Markers and Polylines
+
+        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
+        for (int i = 0; i < points.size(); i++) {
+            LatLng point = points.get(i);
+            options.add(point);
+        }
+        //marker(); //add Marker in current position
+        line = map.addPolyline(options); //add Polyline
+        //Mostrar que se añadió la linea
+        String date = new Date().toString();
+        Log.d("map", "DRAW LINE "+ date);
     }
 }
 
