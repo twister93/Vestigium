@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -54,6 +55,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
 
     GoogleMap map;
     LocationManager locationManager;
+    LocationListener locationListener;
 
     //Minima distancia para toma de puntos
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 metros
@@ -62,6 +64,8 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     //Para dibujar el camino
     private ArrayList<LatLng> points;
     Polyline line;
+    //flag para boton play/start
+    int c=0;
 
 
     public MainFragment(){
@@ -73,6 +77,24 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         points = new ArrayList<LatLng>();
+        final FloatingActionButton btPlay = view.findViewById(R.id.btPlay);
+        btPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(c==0){
+                    btPlay.setImageResource(R.drawable.ic_stop);
+                    startTrip();
+                    c=1;
+                    Log.d("play","PLAY "+c);
+                }else {
+                    btPlay.setImageResource(R.drawable.ic_play);
+                    stopTrip();
+                    c=0;
+                    Log.d("play","PLAY "+c);
+                }
+
+            }
+        });
 
         return view;
     }
@@ -94,12 +116,37 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        /*map.setMyLocationEnabled(true);
-        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        map.setMyLocationEnabled(true);
+        /*map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         UiSettings uiSettings = map.getUiSettings();
         uiSettings.setZoomControlsEnabled(true);*/
 
+        /*LatLng udea = new LatLng(6.266996,-75.5708923);
+        MarkerOptions options = new MarkerOptions();
+        options.position(udea).title("UdeA");
+        float zoomlevel = 16;
+        map.addMarker(options);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(udea, zoomlevel));*/
+    }
+
+    public void stopTrip(){
+        if(locationManager != null){
+            locationManager.removeUpdates(locationListener);
+            locationManager = null;
+        }
+    }
+    public void startTrip(){
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -111,98 +158,55 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
             return;
         }
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                double altitude = location.getAltitude();
+                LatLng latLng = new LatLng(latitude, longitude);
+                Geocoder geocoder = new Geocoder(getApplicationContext());
+                try {
+                    List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+                    String str = addressList.get(0).getLocality() + ",";
+                    str += addressList.get(0).getCountryName();
+                    //Mostrar cada vez que tome un punto
+                    String date = new Date().toString();
+                    Log.d("map", "take location_NET_GPS "+ date);
+                    //Dibujar la linea
+                    points.add(latLng);
+                    redrawLine();
+                    //Dibujar el marcador
+                    marker(latitude,longitude,str);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        };
 
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    double altitude = location.getAltitude();
-                    LatLng latLng = new LatLng(latitude, longitude);
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String str = addressList.get(0).getLocality() + ",";
-                        str += addressList.get(0).getCountryName();
-                        //Mostrar cada vez que tome un punto
-                        String date = new Date().toString();
-                        Log.d("map", "take location_NET "+ date);
-                        //Dibujar la linea
-                        points.add(latLng);
-                        redrawLine();
-                        //Dibujar el marcador
-                        marker(latitude,longitude,str);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
 
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            });
         } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    LatLng latLng = new LatLng(latitude, longitude);
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String str = addressList.get(0).getLocality() + ",";
-                        str += addressList.get(0).getCountryName();
-                        //Mostrar cada vez que tome un punto
-                        String date = new Date().toString();
-                        Log.d("map", "take location_GPS "+ date);
-                        //Dibujar la linea
-                        points.add(latLng);
-                        redrawLine();
-                        //Dibujar el marcador
-                        marker(latitude,longitude,str);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            });
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    MIN_TIME_BETWEEN_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, locationListener);
         }
-
-
-        /*LatLng udea = new LatLng(6.266996,-75.5708923);
-        MarkerOptions options = new MarkerOptions();
-        options.position(udea).title("UdeA");
-        float zoomlevel = 16;
-        map.addMarker(options);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(udea, zoomlevel));*/
     }
 
     public void marker(double lat, double lng, String str){
@@ -227,6 +231,8 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
         String date = new Date().toString();
         Log.d("map", "DRAW LINE "+ date);
     }
+
+
 }
 
 
