@@ -24,6 +24,13 @@ public class Albums {
         this.creationDate = creationDate;
         this.favorite = favorite;
     }
+
+    public Albums(String albumId, String albumName, String creationDate) {
+        this.albumId = albumId;
+        this.albumName = albumName;
+        this.creationDate = creationDate;
+    }
+
     public String getAlbumId() {
 
         return albumId;
