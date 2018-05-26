@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -246,6 +247,8 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
             latitude = location.getLatitude();
             longitude = location.getLongitude();
             altitude = location.getAltitude();
+
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
             //--------------------Acumulando en base de datos
             FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
