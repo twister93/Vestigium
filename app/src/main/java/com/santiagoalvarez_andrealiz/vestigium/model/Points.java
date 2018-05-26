@@ -6,14 +6,16 @@ public class Points extends Albums{
     String longitude;
     String altitude;
     String photoURL;
+    Double lat;
+    Double log;
 
     public Points(){}//Por defecto por requerimiento de Firebase
 
-    public Points(String pointId, String latitude, String longitude) {
-        this.pointId = pointId;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public Points(Double lat, Double log) {
+        this.lat = lat;
+        this.log = log;
     }
+
     public Points(String pointId, String latitude, String longitude, String altitude) {
         this.pointId = pointId;
         this.latitude = latitude;
@@ -27,6 +29,26 @@ public class Points extends Albums{
         this.altitude = altitude;
         this.photoURL = photoURL;
     }
+
+    //That's for the constructor with double latitud and longitude
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.latitude = lat;
+    }
+
+    public Double getLog() {
+        return log;
+    }
+
+    public void setLog(String longitude) {
+        this.log = log;
+    }
+
+    // ...
+
     public String getLatitude() {
         return latitude;
     }

@@ -110,8 +110,7 @@ public class AlbumDBActivity extends AppCompatActivity {
         Log.d("FirebaseSave", "Entra al guardar");
         databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).setValue(albums);
 
-        Points points = new Points(databaseReference.push().getKey(),
-                "-75.5684253","6.2639381");
+        Points points = new Points(-75.5684253,6.2639381);
         databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).child("points").child(points.getPointId()).setValue(points);
     }
 
