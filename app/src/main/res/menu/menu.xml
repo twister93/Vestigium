@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mAlbum"
-        android:title="@string/albums"/>
+        android:icon="@drawable/ic_image_black"/>
     <item android:id="@+id/mHome"
-        android:title="@string/home"/>
+        android:icon="@drawable/ic_home_black"
+        android:iconTintMode="multiply"/>
     <item android:id="@+id/mProfile"
-        android:title="@string/profile"/>
+        android:icon="@drawable/ic_account_box_black"/>
 </menu>
