@@ -46,31 +46,34 @@
         android:onClick="loginclicked"
         android:text="@string/log"
         android:textAllCaps="false"
-        android:textColor="@color/orangered"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/tvRegister"
-        android:layout_width="match_parent"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_one_login"/>
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/btnSignInFacebook"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_medium"
-        android:gravity="center"
-        android:onClick="register"
-        android:text="@string/register"
-        android:textSize="20sp"
-        android:textColor="@color/blue" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp"
+        />
     <com.google.android.gms.common.SignInButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/btnSignInGoogle">
     </com.google.android.gms.common.SignInButton>
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/btnSignInFacebook"
-        android:layout_width="wrap_content"
+
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:fontFamily="@font/liberationsans_italic"
+        android:gravity="center"
+        android:onClick="register"
+        android:text="@string/register"
+        android:textSize="20sp"
+        android:textColor="@color/blue" />
 
 </LinearLayout>
