@@ -87,7 +87,7 @@ public class LocationService extends Service {
                 final Points points = new Points(latitude,longitude);
 
                 databaseReference.child("users").child(firebaseUser.getUid())
-                        .child("albums").child("flag").addValueEventListener(new ValueEventListener() {
+                        .child("flag").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String albumName = dataSnapshot.getValue(String.class);
