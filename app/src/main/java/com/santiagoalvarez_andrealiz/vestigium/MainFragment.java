@@ -93,6 +93,8 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
+    ActivityManager manager;
+
     public MainFragment(){
 
     }
@@ -100,6 +102,8 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
 
         points = new ArrayList<LatLng>();
         final FloatingActionButton btPlay = view.findViewById(R.id.btPlay);
@@ -124,7 +128,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                     c="2";
                     Log.d("service","PLAY ");
                     // Save button status in DB
-                    databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child("flag_button").setValue(2);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("flag_button").setValue(2);
 
                     //Clean map
                     map.clear();
@@ -147,10 +151,10 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                             Toast.makeText(getActivity(), "Album created", Toast.LENGTH_SHORT).show();
                             Log.d("save", "Save Album");
                             String DateTime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            Albums albums = new Albums(etAlbum.getText().toString(), etAlbum.getText().toString() ,DateTime, "-");
+                            Albums albums = new Albums(etAlbum.getText().toString(), etAlbum.getText().toString() ,DateTime, "no");
                             databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumName()).setValue(albums);
-                            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child("flag").setValue(albums.getAlbumName());
-                            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child("flag_button").setValue(c);
+                            databaseReference.child("users").child(firebaseUser.getUid()).child("flag").setValue(albums.getAlbumName());
+                            databaseReference.child("users").child(firebaseUser.getUid()).child("flag_button").setValue(c);
 
                             // ****** STARTING SERVICE *******
 
@@ -167,7 +171,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                         public void onClick(View view) {
                             dialog.hide();
                             btPlay.setImageResource(R.drawable.ic_play);
-                            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child("flag_button").setValue(c);
+                            databaseReference.child("users").child(firebaseUser.getUid()).child("flag_button").setValue(c);
                             Log.d("service","STOP ");
                             c="0";
                         }
@@ -177,7 +181,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                     btPlay.setImageResource(R.drawable.ic_play);
                     c="0";
                     // Save button status in DB (flag_button)
-                    databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child("flag_button").setValue(0);
+                    databaseReference.child("users").child(firebaseUser.getUid()).child("flag_button").setValue(0);
                     Log.d("service","STOP ");
 
                     // ****** STARTING SERVICE *******
@@ -189,7 +193,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
 
         // Get the current album name for put points in it
         databaseReference.child("users").child(firebaseUser.getUid())
-                .child("albums").child("flag").addValueEventListener(new ValueEventListener() {
+                .child("flag").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (isMyServiceRunning(LocationService.class)){
@@ -209,7 +213,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
 
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            //ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
                 return true;
