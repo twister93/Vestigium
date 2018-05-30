@@ -78,7 +78,7 @@ public class PhotosFragment extends Fragment {
                     gv = view.findViewById(R.id.gvPhotos);
                     gv.setAdapter( new GridAdapter());
                 }catch (NullPointerException e){
-                    Log.d("photos", "path check: es null el hpta " + Environment.DIRECTORY_PICTURES+"/"+albumName +"Error "+e);
+                    Log.d("photos", "path check es null el hpta " + Environment.DIRECTORY_PICTURES+"/"+albumName +"Error "+e);
                 }
                 /*myimages = findImages(storageDir);
                 Log.d("photos", "path: " + Environment.DIRECTORY_PICTURES+"/"+albumName);
