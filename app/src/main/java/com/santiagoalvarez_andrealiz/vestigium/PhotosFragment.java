@@ -1,13 +1,20 @@
 package com.santiagoalvarez_andrealiz.vestigium;
 
 
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +25,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.santiagoalvarez_andrealiz.vestigium.model.LocationService;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -28,49 +46,78 @@ public class PhotosFragment extends Fragment {
 
     GridView gv;
     ArrayList<File> myimages;
+
+    //-------------------------------------
+    String albumName;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_photos, container, false);
+        final View view = inflater.inflate(R.layout.fragment_photos, container, false);
 
-        /*gv = view.findViewById(R.id.gvPhotos);
-        gv.setAdapter( new GridAdapter());*/
+
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+
+        databaseReference.child("users").child(firebaseUser.getUid()).child("flag_album").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {//valor de la flag
+                //if (isMyServiceRunning(LocationService.class)){
+                albumName = dataSnapshot.getValue(String.class);///etodo esto es lo que necesito
+                Log.d("photos", "ALBUM SELECTED" + albumName);
+                //getPoints();
+                //}
+                try {
+                    File storageDir = Objects.requireNonNull(getActivity()).getExternalFilesDir(Environment.DIRECTORY_PICTURES + "/" + albumName);
+                    myimages = findImages(storageDir);
+                    Log.d("photos", "path: " + Environment.DIRECTORY_PICTURES+"/"+albumName);
+                    gv = view.findViewById(R.id.gvPhotos);
+                    gv.setAdapter( new GridAdapter());
+                }catch (NullPointerException e){
+                    Log.d("photos", "path check: es null el hpta " + Environment.DIRECTORY_PICTURES+"/"+albumName +"Error "+e);
+                }
+                /*myimages = findImages(storageDir);
+                Log.d("photos", "path: " + Environment.DIRECTORY_PICTURES+"/"+albumName);
+                gv = view.findViewById(R.id.gvPhotos);
+                gv.setAdapter( new GridAdapter());*/
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+
+
 
 
 
         //_____________________________________________________________
         //ArrayList<File> myimages = findImages(Environment.getExternalStorageDirectory());
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES+"/Test6");
-        myimages = findImages(storageDir);
+        //File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES+albumName);
+        //Log.d("photos", "path: " + Environment.DIRECTORY_PICTURES+"/"+albumName);
+        //myimages = findImages(storageDir);
 
-        for (int i=0; i<myimages.size();i++){
+        //gv = view.findViewById(R.id.gvPhotos);
+        //gv.setAdapter( new GridAdapter());
+
+
+        /*for (int i=0; i<myimages.size();i++){
             Toast.makeText(getActivity().getApplicationContext(), myimages.get(i).getName(), Toast.LENGTH_SHORT).show();
-        }
-
-        /*gv = view.findViewById(R.id.gvPhotos);
-        gv.setAdapter( new GridAdapter());*/
-
-        //_____________________________________________________________
+        }*/
 
 
-       GridView gridView = (GridView) view.findViewById(R.id.gvPhotos);
 
-        gridView.setAdapter(new ImageAdapter(getActivity()));
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity().getApplicationContext(),FullImageActivity.class);
-                intent.putExtra("id", position);
-                startActivity(intent);
-            }
-        });
 
         return view;
 
     }
-/*
+
     class GridAdapter extends BaseAdapter{
 
         @Override
@@ -91,37 +138,29 @@ public class PhotosFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            convertView = getLayoutInflater().inflate(R.layout.my_singlegrid,parent,false);
-            ImageView iv = convertView.findViewById(R.id.ivGrid);
+            Log.d("PhotosFragment", "Este es el Uri"+Uri.parse(getItem(position).toString()));
 
-            iv.setImageURI(Uri.parse(getItem(position).toString()));
+            Bitmap bitmap = BitmapFactory.decodeFile(getItem(position).toString());
+            Matrix matrix = new Matrix();
 
-            return convertView;
+            matrix.postRotate(90);
+
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,500,500,true);
+
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaledBitmap , 0, 0, scaledBitmap .getWidth(), scaledBitmap .getHeight(), matrix, true);
+
+
+            ImageView imageView = new ImageView(getApplicationContext());
+            imageView.setImageBitmap(rotatedBitmap);
+            //imageView.setImageURI(Uri.parse(getItem(position).toString()));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setLayoutParams(new GridView.LayoutParams(450,450));
+
+
+            return imageView;
         }
     }
 
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        File storageDir = getActivity().getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES+"/Test6");
-        myimages = findImages(storageDir);
-
-    }*/
-
-
-    /*public ArrayList<File> findImages(File root){
-        ArrayList<File> a1 = new ArrayList<File>();
-        File[] files = root.listFiles();
-        for(File singleFile : files){
-            if (singleFile.isDirectory() && !singleFile.isHidden()){
-                a1.addAll(findImages(singleFile));
-            }else {
-                if(singleFile.getName().endsWith(".jpg")){
-                    a1.add(singleFile);
-                }
-            }
-        }
-        return a1;
-   }*/
    ArrayList<File> findImages(File root) {
        ArrayList<File> a1 = new ArrayList<>();
 
@@ -138,7 +177,4 @@ public class PhotosFragment extends Fragment {
        return a1;
    }
 
-
-
-
-   }
+}
