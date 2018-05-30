@@ -93,7 +93,7 @@ public class LocationService extends Service {
                         String albumName = dataSnapshot.getValue(String.class);
                         Log.d("service", albumName);
                         // Store points in DB
-                        databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albumName).child("points").child(Integer.toString(i)).setValue(points);
+                        databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albumName).child("points").child(Integer.toString(i)).setValue(points);//Aquí para usar constructor
                         Log.d("service","i value: "+i);
                         i++;
                     }

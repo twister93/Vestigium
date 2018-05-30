@@ -42,14 +42,16 @@
         android:id="@+id/btLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/liberationsans_regular"
+        android:fontFamily="@font/liberationsans_italic"
         android:onClick="loginclicked"
         android:text="@string/log"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="30sp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/shape_one_login"/>
+        android:textSize="20sp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/shape_one_login"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"/>
     <com.facebook.login.widget.LoginButton
         android:id="@+id/btnSignInFacebook"
         android:layout_width="wrap_content"
@@ -73,7 +75,7 @@
         android:gravity="center"
         android:onClick="register"
         android:text="@string/register"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="@color/blue" />
 
 </LinearLayout>

@@ -84,7 +84,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     private ArrayList<LatLng> points;
     Polyline line;
     //Boton play/pause/stop -> 0/1/2
-    String c="0";
+    String c="0";//bandera estado del botón
 
     String albumName;
     Double lat,log;
@@ -125,7 +125,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
             public void onClick(View view) {
                 if(c == "0"){
                     btPlay.setImageResource(R.drawable.ic_stop);
-                    c="2";
+                    c="2";//indica q la imagen muestra en Stop
                     Log.d("service","PLAY ");
                     // Save button status in DB
                     databaseReference.child("users").child(firebaseUser.getUid()).child("flag_button").setValue(2);
@@ -153,7 +153,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                             String DateTime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                             Albums albums = new Albums(etAlbum.getText().toString(), etAlbum.getText().toString() ,DateTime, "no");
                             databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumName()).setValue(albums);
-                            databaseReference.child("users").child(firebaseUser.getUid()).child("flag").setValue(albums.getAlbumName());
+                            databaseReference.child("users").child(firebaseUser.getUid()).child("flag").setValue(albums.getAlbumName());//variable en album
                             databaseReference.child("users").child(firebaseUser.getUid()).child("flag_button").setValue(c);
 
                             // ****** STARTING SERVICE *******
@@ -190,14 +190,14 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                 }
             }
         });
-
+        //Acá es donde se accede al usuario y luego a la flag,
         // Get the current album name for put points in it
         databaseReference.child("users").child(firebaseUser.getUid())
                 .child("flag").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {//valor de la flag
                 if (isMyServiceRunning(LocationService.class)){
-                    albumName = dataSnapshot.getValue(String.class);
+                    albumName = dataSnapshot.getValue(String.class);///etodo esto es lo que necesito
                     Log.d("service", "ALBUM NAME " + albumName);
                     getPoints();
                 }
@@ -264,7 +264,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
 
     public void getPoints (){
         databaseReference.child("users").child(firebaseUser.getUid()).child("albums")
-                .child(albumName).child("points").addChildEventListener(new ChildEventListener() {
+                .child(albumName).child("points").addChildEventListener(new ChildEventListener() {//escucha todos los hijos
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             String i=dataSnapshot.getKey();
@@ -343,7 +343,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     }
 
     // Take points from DB and draw them
-    public void addSavedPoints(String i){
+    public void addSavedPoints(String i){//Añadir un punto
         final String cont = i;
         databaseReference.child("users").child(firebaseUser.getUid()).child("albums")
                 .child(albumName).child("points").child(cont).child("lat").addValueEventListener(new ValueEventListener() {

@@ -1,5 +1,6 @@
 package com.santiagoalvarez_andrealiz.vestigium;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -47,9 +48,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.santiagoalvarez_andrealiz.vestigium.model.Albums;
+import com.santiagoalvarez_andrealiz.vestigium.model.LocationService;
 import com.santiagoalvarez_andrealiz.vestigium.model.Points;
 import com.squareup.picasso.Picasso;
 
@@ -84,6 +89,8 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
     double altitude = 0;
     private DatabaseReference databaseReference; //referencia que necesitamos
     //-------------------------------------
+    ActivityManager manager;
+    String albumName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,7 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         bottomNavigationViewMenu.findItem(R.id.mHome).setChecked(true);
 
 
+
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
 
@@ -109,6 +117,7 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         //-----------------Chequeo de usuario logueado------------
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         final FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         if (firebaseUser == null){ //No user login
             Intent i =new Intent(BottomActivity.this, LoginActivity.class);
@@ -117,7 +126,29 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
         }
 //-------------------------------------------------------
         iPhoto = findViewById(R.id.ivLogin);
+
+        manager = (ActivityManager) this.getSystemService(Context.ACTIVITY_SERVICE);
 //-------------------------------------------------------
+
+        //Acá es donde se accede al usuario y luego a la flag,
+        // Get the current album name for put points in it
+        databaseReference.child("users").child(firebaseUser.getUid())
+                .child("flag").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {//valor de la flag
+                if (isMyServiceRunning(LocationService.class)){
+                    albumName = dataSnapshot.getValue(String.class);///etodo esto es lo que necesito
+                    Log.d("camera", "ALBUM NAME " + albumName);
+                    //getPoints();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
+
+
 
     }
 
@@ -170,33 +201,44 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
     static final int REQUEST_TAKE_PHOTO = 1;
 
     private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
 
+        if(isMyServiceRunning(LocationService.class)){
+            Log.d("camera", "SERVICE RUNNING GO TO CAMERA");
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+
+                }
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.santiagoalvarez_andrealiz.vestigium.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
             }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.santiagoalvarez_andrealiz.vestigium.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
+
+        } else {
+            Log.d("camera", "SERVICE NOT RUNNING");
+            Toast.makeText(this, "You need to start your trip first", Toast.LENGTH_SHORT).show();
         }
+
+
+
     }
 
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES+"/"+albumName);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -256,20 +298,12 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
             final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
             String DateTime = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            //id - databaseReference.push().getKey()
-            Albums albums= new Albums (databaseReference.push().getKey(),
-                    "Prueba",
-                    DateTime,
-                    "Yes");
-            Log.d("FirebaseSave", "Entra al guardar");
-            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).setValue(albums);
-
             Points points = new Points(databaseReference.push().getKey(),
                     Double.toString(latitude),
                     Double.toString(longitude),
                     Double.toString(altitude),
                     mCurrentPhotoPath);
-            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albums.getAlbumId()).child("points").child(points.getPointId()).setValue(points);
+            databaseReference.child("users").child(firebaseUser.getUid()).child("albums").child(albumName).child("photos").child(points.getPointId()).setValue(points);
             Log.d("FirebaseLocation:", "latitude:"+latitude+" longitude:"+longitude+" altitude: "+altitude);
         }
 
@@ -281,6 +315,16 @@ public class BottomActivity extends AppCompatActivity implements GoogleApiClient
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 
