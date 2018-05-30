@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
@@ -342,6 +343,16 @@ public class MapsFragment extends Fragment implements GoogleApiClient.OnConnecti
             Bitmap bmImg = BitmapFactory.decodeFile(pathList.get(x));
             Bitmap scaleBitmap = Bitmap.createScaledBitmap(bmImg, 200,200, true);
             Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+
+            Matrix matrix = new Matrix();
+
+            matrix.postRotate(90);
+
+
+            Bitmap rotatedBitmap = Bitmap.createBitmap(scaleBitmap , 0, 0, scaleBitmap .getWidth(), scaleBitmap .getHeight(), matrix, true);
+
+
+
             Bitmap bmp = Bitmap.createBitmap(300, 300, conf);
             Canvas canvas1 = new Canvas(bmp);
             // paint defines the text color, stroke width and size
@@ -350,7 +361,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.OnConnecti
             color.setColor(Color.WHITE);
             // modify canvas
             canvas1.drawRect(0,0,220,220,color);
-            canvas1.drawBitmap(scaleBitmap, 10,10, color);
+            canvas1.drawBitmap(rotatedBitmap, 10,10, color);
             // add marker to Map
             map.addMarker(new MarkerOptions()
                     .position(latLng1)
