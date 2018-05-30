@@ -59,7 +59,7 @@ public class LocationService extends Service {
     //Minima distancia para toma de puntos
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 10 metros
     //Minimo tiempo para updates en Milisegundos
-    private static final long MIN_TIME_BETWEEN_UPDATES = 1000 * 60 * 0; // 1 minutos
+    private static final long MIN_TIME_BETWEEN_UPDATES = 1000 * 60 * 1; // 1 minutos
 
     FirebaseAuth firebaseAuth =FirebaseAuth.getInstance();
     FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
