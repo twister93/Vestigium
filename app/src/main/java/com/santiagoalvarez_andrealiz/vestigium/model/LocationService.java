@@ -46,10 +46,6 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-/**
- * Created by andrealiz on 23/05/18.
- */
-
 public class LocationService extends Service {
 
     GoogleMap map;
